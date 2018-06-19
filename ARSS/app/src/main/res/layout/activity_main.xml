@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/myCameraView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:show_fps="true"></org.opencv.android.JavaCameraView>
+
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/GridLayout1"
@@ -14,9 +24,9 @@
         android:columnCount="3"
         android:orientation="horizontal"
         android:rowCount="3"
-        tools:context=".GridXMLActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintStart_toStartOf="@+id/myCameraView"
+        app:layout_constraintTop_toTopOf="@+id/myCameraView"
+        tools:context=".GridXMLActivity">
 
         <EditText
             android:layout_column="1"
@@ -28,8 +38,13 @@
         android:id="@+id/load_image_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_weight="1"
         android:text="Load image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/take_image_button"
         app:layout_editor_absoluteX="270dp"
         app:layout_editor_absoluteY="447dp" />
 
@@ -37,11 +52,16 @@
         android:id="@+id/take_image_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="149dp"
         android:layout_weight="1"
         android:text="Take image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/load_image_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
-
 
 
 </android.support.constraint.ConstraintLayout>
