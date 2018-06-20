@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         Core.transpose(mat, matT);
         Imgproc.resize(matT, matF, matF.size(), 0, 0, 0);
         Core.flip(matF, mat, 1);
-        
+
         return mat;
     }
 
