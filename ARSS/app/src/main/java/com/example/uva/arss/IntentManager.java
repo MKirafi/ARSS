@@ -1,3 +1,7 @@
+/*
+ *   A wrapper class for intent.
+ */
+
 package com.example.uva.arss;
 
 import android.content.Intent;
