@@ -1,115 +1,86 @@
 package com.example.uva.arss;
 
+import java.util.Arrays;
+
 public class Sudoku {
 
-    private int[][] grid;
-    private int width, height;
+    private static final int[] freqs = new int[10];
 
-    public Sudoku(int[][] grid){
-        this.grid = grid;
-        this.width = grid[0].length;
-        this.height = grid.length;
-    }
-
-    public int[][] solveSudoku(int [][] grid){
-        if (solve(grid)){
-            return this.grid;
+    static public int[] solveSudoku(int [] grid, int cell){
+        if (solve(grid, cell)){
+            return grid;
         }
         return null;
     }
 
-    private boolean solve(int[][] grid){
-        for(int row = 0; row < height; row++){
-            for(int column = 0; column < width; column++){
-                if(grid[row][column] == 0){
-                    for(int i = 1; i <= 9; i++){
-                        grid[row][column] = i;
-                        if(valid(grid, row, column) && solve(grid)){
+    public static boolean solve(int[] grid, int cell){
+        while (cell < 81 && grid[cell] > 0){
+            //System.out.println("Cell: " + cell + " ========================");
+            cell++;
+        }
+
+        if(cell == 81){
+            return true;
+        }
+
+        for(int i = 1; i <= 9; i++){
+            grid[cell] = i;
+            if(rowcheck(grid, cell / 9)){
+                if(columncheck(grid, cell % 9)){
+                    if(blockcheck(grid, cell / 9 % 3 * 3, cell % 3 * 3)){
+                        if(valid(grid) && solve(grid, cell + 1)){
                             return true;
                         }
-                        grid[row][column] = 0;
                     }
-                    return false;
                 }
             }
+        }
+        grid[cell] = 0;
+        return false;
+    }
+
+    public static boolean valid(int[] grid){
+        for(int i = 0; i < 9; i++) {
+            if(!rowcheck(grid, i))
+                return false;
+            if(!columncheck(grid, i))
+                return false;
+            if(!blockcheck(grid, i % 3 * 3, i / 3 * 3))
+                return false;
         }
         return true;
     }
 
-    private boolean valid(int[][] grid, int row, int column){
-        return (rowcheck(grid, row) && columncheck(grid, column) && blockcheck(grid, row, column));
-    }
+    public static boolean rowcheck(int[] grid, int row){
+        Arrays.fill(freqs, 0);
 
-    private boolean rowcheck(int[][] grid, int row){
-        int[] values = new int[9];
-        for (int i = 0; i < grid[row].length; i++){
-            for(int j = 0; j < values.length; j++){
-                if (grid[row][i] == values[j] && grid[row][i] != 0){
-                    return false;
-                }
-
-            }
-            values[i] = grid[row][i];
+        for(int column = 0; column < 9; column++){
+            int cell = grid[(row * 9)+ column];
+            if(cell > 0 && ++freqs[cell] > 1)
+                return false;
         }
         return true;
     }
 
-    private boolean columncheck(int[][] grid, int column){
-        int[] values = new int[9];
-        for (int i = 0; i < grid.length; i++){
-            for(int j = 0; j < values.length; j++){
-                if (grid[i][column] == values[j] && grid[i][column] != 0){
-                    return false;
-                }
-            }
-            values[i] = grid[i][column];
+    public static boolean columncheck(int[] grid, int column){
+        Arrays.fill(freqs, 0);
+
+        for(int row = 0; row < 9; row++){
+            int cell = grid[(row*9) + column];
+            if(cell > 0 && ++freqs[cell] > 1)
+                return false;
         }
         return true;
     }
 
-    private boolean blockcheck(int[][] grid, int row, int column){
-        int [] rows = new int[3];
-        int [] columns = new  int[3];
-        int [] values = new int[9];
-        if(row == 0 || row == 1 || row == 2){
-            rows = new int[]{0, 1, 2};
-        }else if(row == 3 || row == 4 || row == 5){
-            rows = new int[]{3, 4, 5};
-        }else if(row == 6 || row == 7 || row == 8){
-            rows = new int[]{6, 7, 8};
-        }
+    public static boolean blockcheck(int[] grid, int row, int column){
+        Arrays.fill(freqs, 0);
 
-        if(column == 0 || column == 1 || column == 2){
-            columns = new int[]{0, 1, 2};
-        }else if(column == 3 || column == 4 || column == 5){
-            columns = new int[]{3, 4, 5};
-        }else if(column == 6 || column == 7 || column == 8){
-            columns = new int[]{6, 7, 8};
-        }
-
-
-        for(int i = rows[0]; i <= rows[2]; i++){
-            for(int j = columns[0]; j <= columns[2]; j++){
-                for(int k = 0; k < values.length; k++){
-                    if (grid[i][j] == values[k] && grid[i][j] != 0){
-                        return false;
-                    }
-                }
-                for(int x = 0; x < values.length; x++){
-                    if (values[x] == 0){
-                        values[x] = grid[i][j];
-                        break;
-                    }
-//                    if(column == 2 && row == 5){
-//                        System.out.println("===========================================]");
-//                        System.out.print("{");
-//                        for(int g = 0; g < values.length; g++){
-//                            System.out.print(values[g] + ", ");
-//                        }
-//                        System.out.println("}");
-//                    }
-                }
-            }
+        for(int i = 0; i < 9; i++)
+        {
+            int cell = grid[(row + i / 3) * 9 + (column + i % 3)];
+            if(cell > 0 && ++freqs[cell] > 1)
+                return false;
         }
         return true;
     }
