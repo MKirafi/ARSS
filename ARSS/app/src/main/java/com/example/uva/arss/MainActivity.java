@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
     private TextView txtOutput;
+    private String language = "nl_NL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.txtOutput = findViewById(R.id.txt_output);
-        this.intentManager = new IntentManager();
+        this.intentManager = new IntentManager(language);
 
         /* "record audio" button: */
         findViewById(R.id.record_audio).setOnClickListener(new View.OnClickListener() {
@@ -47,10 +48,17 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 1: {
                 if (resultCode == RESULT_OK && null != data) {
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String text = result.get(0);
-                    txtOutput.setText(text);
+                    VoiceCommand command = new VoiceCommand(data, language);
+                    int[] values = command.getValues();
+                    if(values.length == 0) {
+                        Toast.makeText(getApplicationContext(),
+                                "Could not parse move.",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                values[0] + " " + values[1] + " " + values[2],
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
                 break;
             }
