@@ -20,8 +20,4 @@ public class IntentManager {
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
     }
-
-    public IntentManager() {
-        this("en");
-    }
 }
