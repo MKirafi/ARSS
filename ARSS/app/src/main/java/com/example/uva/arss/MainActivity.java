@@ -48,13 +48,10 @@ public class MainActivity extends AppCompatActivity {
                 0,9,0,0,0,0,4,0,0};
 
         BruteSudoku bruteSudoku = new BruteSudoku(grid);
-
-        long startTime = System.currentTimeMillis();
-        //int[][] newGrid = bruteSudoku.solveSudoku(grid);
-        Sudoku.solve(sud, 0);
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println(elapsedTime);
+        long startTime = System.nanoTime();
+        bruteSudoku.solveSudoku(grid);
+//        Sudoku.solve(sud, 0);
+        System.out.println("Elapsed time: " + (System.nanoTime() - startTime));
         print(sud);
 
 
