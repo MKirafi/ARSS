@@ -1,18 +1,14 @@
 package com.example.uva.arss;
 
-import android.content.ActivityNotFoundException;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
-    private TextView txtOutput;
     private String language = "nl_NL";
     private SpeechRecognizer sr;
 
