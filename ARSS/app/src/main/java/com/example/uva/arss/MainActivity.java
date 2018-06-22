@@ -30,42 +30,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sr.startListening(intentManager.intent);
-//                try {
-////                    startActivityForResult(intentManager.intent, 1);
-//                } catch (ActivityNotFoundException a) {
-//                    Toast.makeText(getApplicationContext(),
-//                            "No speech. No gain. Pls buy a new  phone.",
-//                            Toast.LENGTH_SHORT).show();
-//                }
             }
         });
     }
-
-    //    /**
-//     * Callback for speech recognition activity
-//     * */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (requestCode) {
-//            case 1: {
-//                if (resultCode == RESULT_OK && null != data) {
-//                    VoiceCommand command = new VoiceCommand(data, language);
-//                    int[] values = command.getValues();
-//                    if(values.length == 0) {
-//                        Toast.makeText(getApplicationContext(),
-//                                "Could not parse move.",
-//                                Toast.LENGTH_LONG).show();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(),
-//                                values[0] + " " + values[1] + " " + values[2],
-//                                Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//                break;
-//            }
-//        }
-//    }
     class speechListener implements RecognitionListener {
         public void onReadyForSpeech(Bundle params) {
         }
