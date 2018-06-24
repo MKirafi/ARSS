@@ -92,23 +92,24 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mat = turnImg(mat);
         mat = preprocMat(mat);
         MatOfPoint largest = largestPolygon(mat);
-        MatOfPoint2f aproxPolygon = aproxPolygon(largest);
+        if(largest != null) {
+            MatOfPoint2f aproxPolygon = aproxPolygon(largest);
 
-        if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
-            for(int i = 0; i < 20; i++) {
-                System.out.println("FOUR CORNERS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + i);
+            if (Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
+                for (int i = 0; i < 20; i++) {
+                    System.out.println("FOUR CORNERS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + i);
+                }
+                int size = distance(aproxPolygon);
+
+                Mat cutted = applyMask(mat, largest);
+
+                Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+                Mat preprocessed2 = preprocMat(wrapped);
+                Mat withOutLines = cleanLines(preprocessed2);
+
+                return withOutLines;
             }
-            int size = distance(aproxPolygon);
-
-            Mat cutted = applyMask(mat, largest);
-
-            Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
-            Mat preprocessed2 = preprocMat(wrapped);
-            Mat withOutLines = cleanLines(preprocessed2);
-
-            return withOutLines;
         }
-
         return mat;
     }
 
