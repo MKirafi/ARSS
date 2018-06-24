@@ -1,34 +1,48 @@
+// https://github.com/joseluisdiaz/sudoku-solver/blob/master/src/main/java/org/losmonos/sudoku/grabber/DetectSudoku.java
+
 package com.example.uva.arss;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Picture;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ordering;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.photo.Photo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.core.CvType.CV_8UC4;
 import static org.opencv.imgproc.Imgproc.CHAIN_APPROX_SIMPLE;
 import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
-import static org.opencv.imgproc.Imgproc.RETR_LIST;
+import static org.opencv.imgproc.Imgproc.approxPolyDP;
+import static org.opencv.imgproc.Imgproc.boundingRect;
 import static org.opencv.imgproc.Imgproc.contourArea;
+import static org.opencv.imgproc.Imgproc.getPerspectiveTransform;
+import static org.opencv.imgproc.Imgproc.rectangle;
+import static org.opencv.imgproc.Imgproc.warpPerspective;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -36,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     Mat mat, matF, matT, hierarchy;
     BaseLoaderCallback baseLoaderCallback;
     List<MatOfPoint> contours = new ArrayList<>();
+    Size FOUR_CORNERS = new Size(1, 4);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,32 +88,151 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mat = inputFrame.rgba();
-        hierarchy = new Mat();
-        Core.transpose(mat, matT);
-        Imgproc.resize(matT, matF, matF.size(), 0, 0, 0);
-        Core.flip(matF, mat, 1);
-          Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2GRAY);
-          Imgproc.GaussianBlur(mat, mat, new Size(11, 11), 0);
-          Imgproc.adaptiveThreshold(mat, mat, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 5, 2);
-          Core.bitwise_not(mat, mat);
-          Imgproc.Canny(mat, mat, 400, 600, 5, true);
-          Imgproc.findContours(mat.clone(), contours, hierarchy,RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
-          double largest_area = 0;
-          int largest_area_index = 0;
-          Mat largest_contour = new Mat();
-          for(int i = 0; i < contours.size(); i++) {
-              double size = contourArea(contours.get(i), false);
-            if(size > largest_area) {
-                largest_area = size;
-                largest_area_index = i;
-                largest_contour = contours.get(i);
+        mat = turnImg(mat);
+        mat = preprocMat(mat);
+        MatOfPoint largest = largestPolygon(mat);
+        MatOfPoint2f aproxPolygon = aproxPolygon(largest);
+
+        if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
+            for(int i = 0; i < 20; i++) {
+                System.out.println("FOUR CORNERS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + i);
             }
-          }
-          System.out.println("Rows: " + largest_contour.rows());
-          System.out.println("Columns: " + largest_contour.cols());
+            int size = distance(aproxPolygon);
+
+            Mat cutted = applyMask(mat, largest);
+
+            Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+            Mat preprocessed2 = preprocMat(wrapped);
+            Mat withOutLines = cleanLines(preprocessed2);
+
+            return withOutLines;
+        }
+
         return mat;
     }
+
+    private Mat turnImg(Mat original) {
+        Core.transpose(original, matT);
+        Imgproc.resize(matT, matF, matF.size(), 0, 0, 0);
+        Core.flip(matF, original, 1);
+        return original;
+    }
+
+    private Mat preprocMat(Mat preprocMat) {
+        Mat processed = new Mat();
+        Imgproc.cvtColor(preprocMat, processed, Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.GaussianBlur(processed, processed, new Size(11, 11), 0);
+        Imgproc.adaptiveThreshold(processed, processed, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 5, 2);
+        Core.bitwise_not(processed, processed);
+        return processed;
+    }
+
+    private MatOfPoint largestPolygon(Mat mat) {
+        double area, largestArea = 0;
+        MatOfPoint largest = null;
+        hierarchy = new Mat();
+
+        Imgproc.findContours(mat.clone(), contours, hierarchy,RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+        for(int i = 0; i < contours.size(); i++) {
+            area = contourArea(contours.get(i), false);
+            if(area > largestArea) {
+                largestArea = area;
+                largest = contours.get(i);
+            }
+        }
+
+        return largest;
+    }
+
+    private MatOfPoint2f aproxPolygon(MatOfPoint poly) {
+        MatOfPoint2f dst = new MatOfPoint2f();
+        MatOfPoint2f src = new MatOfPoint2f();
+        poly.convertTo(src, CvType.CV_32FC2);
+
+        double arcLength = Imgproc.arcLength(src, true);
+        approxPolyDP(src, dst, 0.02 * arcLength, true);
+
+        return dst;
+    }
+
+    private Mat applyMask(Mat image, MatOfPoint poly) {
+        Mat mask = Mat.zeros(image.size(), CvType.CV_8UC1);
+
+        Imgproc.drawContours(mask, ImmutableList.of(poly), 0, Scalar.all(255), -1);
+        Imgproc.drawContours(mask, ImmutableList.of(poly), 0, Scalar.all(0), 2);
+
+        Mat dst = new Mat();
+        image.copyTo(dst, mask);
+
+        return dst;
+    }
+
+    private int distance(MatOfPoint2f poly) {
+        Point[] a =  poly.toArray();
+        return (int)Math.sqrt((a[0].x - a[1].x)*(a[0].x - a[1].x) +
+                (a[0].y - a[1].y)*(a[0].y - a[1].y));
+    }
+
+    private Mat cleanLines(Mat image) {
+        Mat m = image.clone();
+        Mat lines = new Mat();
+
+        int threshold = 50;
+        int minLineSize = 200;
+        int lineGap = 20;
+
+        Imgproc.HoughLinesP(m, lines, 1, Math.PI / 180, threshold, minLineSize, lineGap);
+
+        for (int x = 0; x < lines.cols(); x++) {
+            double[] vec = lines.get(0, x);
+            double x1 = vec[0],
+                    y1 = vec[1],
+                    x2 = vec[2],
+                    y2 = vec[3];
+            Point start = new Point(x1, y1);
+            Point end = new Point(x2, y2);
+
+            Imgproc.line(m, start, end, Scalar.all(0), 3);
+        }
+        return m;
+    }
+
+    private Mat wrapPerspective(int size, MatOfPoint2f src, Mat image) {
+        Size reshape = new Size(size, size);
+
+        Mat undistorted = new Mat(reshape, CvType.CV_8UC1);
+
+        MatOfPoint2f d = new MatOfPoint2f();
+        d.fromArray(new Point(0, 0), new Point(0, reshape.width), new Point(reshape.height, 0),
+                new Point(reshape.width, reshape.height));
+
+        warpPerspective(image, undistorted, getPerspectiveTransform(src, d), reshape);
+
+        return undistorted;
+    }
+
+    private MatOfPoint2f orderPoints(MatOfPoint2f mat) {
+        List<Point> pointList = SORT.sortedCopy(mat.toList());
+
+        if (pointList.get(1).x > pointList.get(2).x) {
+            Collections.swap(pointList, 1, 2);
+        }
+
+        MatOfPoint2f s = new MatOfPoint2f();
+        s.fromList(pointList);
+
+        return s;
+    }
+
+    private static final Ordering<Point> SORT = Ordering.natural().nullsFirst().onResultOf(
+            new Function<Point, Integer>() {
+                public Integer apply(Point foo) {
+                    return (int) (foo.x+foo.y);
+                }
+            }
+    );
 
     @Override
     public void onCameraViewStarted(int width, int height) {

@@ -33,4 +33,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.ibm.watson.developer_cloud:android-sdk:0.4.3'
     implementation project(':openCVLibrary341')
+    api 'com.google.guava:guava:25.1-android'
 }
