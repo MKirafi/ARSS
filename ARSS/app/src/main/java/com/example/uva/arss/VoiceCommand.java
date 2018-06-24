@@ -9,6 +9,8 @@ package com.example.uva.arss;
 public class VoiceCommand {
     private String result;
     private String language;
+
+
     public VoiceCommand(String result, String language) {
         this.result = result + " ";
         this.language = language;
@@ -18,8 +20,9 @@ public class VoiceCommand {
     // Parses the data from speech recognizer and returns an array.
     // The first value of the array is the x coordinate, the second the x coordinate and the third
     // is the number that will be put in that coordinate.
-    public int[] getValues() {
-        int[] values = new int[3];
+    public Move getMove() {
+        Move m = new Move();
+
         String keyword = (language == "en") ? "location" : "plaats";
         int index = result.indexOf(keyword);
         int progress = 0;
@@ -27,16 +30,16 @@ public class VoiceCommand {
             char c = result.charAt(i);
             System.out.println(c +  "letter");
             if(progress == 0 && ((c >= 'a' && c <= 'i') || (c >= 'A' && c <= 'I'))) {
-                values[progress] = translateToNumber(c);
-
+                m.setTranslatedX(c);
             } else if ((progress == 1 || progress == 2 ) && Character.isDigit(c)) {
                 int num = Integer.parseInt(c + "");
                 if(num == 0 || num > 9) continue;
 
-                if(progress == 1) values[progress] = num - 1;
+                if(progress == 1) m.setTranslatedY(num);
                 else {
-                    values[progress] = num;
-                    return values;
+                    m.setValue(num);
+                    m.setValid();
+                    return m;
                 }
             } else {
                 continue;
@@ -44,7 +47,7 @@ public class VoiceCommand {
             progress ++;
         }
 
-        return new int[0];
+        return m;
     }
 
     // Replaces all occurrences of words for numbers with the number itself.
@@ -61,10 +64,5 @@ public class VoiceCommand {
     }
 
 
-    // Returns a number from a translated char.
-    // A -> 0, B -> 1, C -> 2 ...
-    // a -> 0, b -> 1, c -> 2 ...
-    private int translateToNumber(char c) {
-        return (c - 97 >= 0) ? c - 97 : c - 65;
-    }
+
 }

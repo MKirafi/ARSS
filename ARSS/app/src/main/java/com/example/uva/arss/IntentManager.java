@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.speech.RecognizerIntent;
 
 public class IntentManager {
-    public Intent intent;
+    private Intent intent;
     public IntentManager(String lang) {
         String prompt = (lang == "en")
             ?"Say: location X Y Value. Ex: location A3 7."
@@ -19,5 +19,8 @@ public class IntentManager {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
+    }
+    Intent getIntent() {
+        return intent;
     }
 }
