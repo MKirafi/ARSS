@@ -22,133 +22,66 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="horizontal" >
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,0"
+        android:id="@+id/row0column0"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,1"
+        android:id="@+id/row0column1"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,2"
+        android:id="@+id/row0column2"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,3"
+        android:id="@+id/row0column3"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,4"
+        android:id="@+id/row0column4"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,5"
+        android:id="@+id/row0column5"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,6"
+        android:id="@+id/row0column6"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,7"
+        android:id="@+id/row0column7"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/0,8"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,0"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,1"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,2"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,3"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,4"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,5"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,6"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,7"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/1,8"
+        android:id="@+id/row0column8"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
@@ -156,133 +89,66 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="horizontal" >
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,0"
+        android:id="@+id/row1column0"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,1"
+        android:id="@+id/row1column1"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,2"
+        android:id="@+id/row1column2"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,3"
+        android:id="@+id/row1column3"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,4"
+        android:id="@+id/row1column4"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,5"
+        android:id="@+id/row1column5"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,6"
+        android:id="@+id/row1column6"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,7"
+        android:id="@+id/row1column7"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/2,8"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,0"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,1"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,2"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,3"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,4"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,5"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,6"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,7"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/3,8"
+        android:id="@+id/row1column8"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
@@ -290,133 +156,66 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="horizontal" >
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,0"
+        android:id="@+id/row2column0"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,1"
+        android:id="@+id/row2column1"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,2"
+        android:id="@+id/row2column2"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,3"
+        android:id="@+id/row2column3"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,4"
+        android:id="@+id/row2column4"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,5"
+        android:id="@+id/row2column5"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,6"
+        android:id="@+id/row2column6"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,7"
+        android:id="@+id/row2column7"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/4,8"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,0"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,1"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,2"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,3"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,4"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,5"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,6"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,7"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/5,8"
+        android:id="@+id/row2column8"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
@@ -424,133 +223,66 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="horizontal" >
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,0"
+        android:id="@+id/row3column0"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,1"
+        android:id="@+id/row3column1"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,2"
+        android:id="@+id/row3column2"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,3"
+        android:id="@+id/row3column3"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,4"
+        android:id="@+id/row3column4"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,5"
+        android:id="@+id/row3column5"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,6"
+        android:id="@+id/row3column6"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,7"
+        android:id="@+id/row3column7"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/6,8"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,0"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,1"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,2"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,3"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,4"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,5"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,6"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,7"
-        android:digits="123456789"
-        android:inputType="number"
-        android:maxLength="1"/>
-
-        <EditText
-        android:layout_weight="1"
-        android:id="@+id/7,8"
+        android:id="@+id/row3column8"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
@@ -558,71 +290,340 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="horizontal" >
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,0"
+        android:id="@+id/row4column0"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,1"
+        android:id="@+id/row4column1"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,2"
+        android:id="@+id/row4column2"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,3"
+        android:id="@+id/row4column3"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,4"
+        android:id="@+id/row4column4"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,5"
+        android:id="@+id/row4column5"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,6"
+        android:id="@+id/row4column6"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,7"
+        android:id="@+id/row4column7"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
         <EditText
         android:layout_weight="1"
-        android:id="@+id/8,8"
+        android:id="@+id/row4column8"
         android:digits="123456789"
         android:inputType="number"
         android:maxLength="1"/>
 
-        />
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column0"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column1"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column2"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column3"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column4"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column5"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column6"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column7"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row5column8"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column0"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column1"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column2"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column3"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column4"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column5"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column6"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column7"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row6column8"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column0"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column1"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column2"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column3"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column4"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column5"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column6"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column7"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row7column8"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column0"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column1"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column2"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column3"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column4"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column5"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column6"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column7"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        <EditText
+        android:layout_weight="1"
+        android:id="@+id/row8column8"
+        android:digits="123456789"
+        android:inputType="number"
+        android:maxLength="1"/>
+
+        </LinearLayout>
+
     </GridLayout>
 
     <Button
