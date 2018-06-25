@@ -46,15 +46,25 @@ public class MainActivity extends AppCompatActivity {
                      0,0,8,5,0,0,0,1,0,
                      0,9,0,0,0,0,4,0,0};
 
+        int[] sud2 = {0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,0};
+
     BruteSudoku bruteSudoku = new BruteSudoku(grid);
 
     long startTime = System.currentTimeMillis();
 //        int[][] newGrid = bruteSudoku.solveSudoku(grid);
-    Sudoku.solve(sud, 0);
+    Sudoku.solve(sud2, 0);
     long stopTime = System.currentTimeMillis();
     long elapsedTime = stopTime - startTime;
     System.out.println(elapsedTime);
-    print(sud);
+    print(sud2);
 
     }
 
