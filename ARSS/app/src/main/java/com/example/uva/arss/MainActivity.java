@@ -74,19 +74,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onPartialResults(Bundle partialResults) {
-            System.out.println("partial res");
-//            String res = partialResults.getStringArrayList(sr.RESULTS_RECOGNITION).get(0);
-//            VoiceCommand command = new VoiceCommand(res, language);
-//            Move m = command.getMove();
-//            if (!m.isValid()) {
-//                Toast.makeText(getApplicationContext(),
-//                        "Could not parse move.",
-//                        Toast.LENGTH_LONG).show();
-//            } else {
-//                Toast.makeText(getApplicationContext(),
-//                        m.getX() + " " + m.getY() + " " + m.getValue(),
-//                        Toast.LENGTH_LONG).show();
-//            }
         }
 
         public void onEvent(int eventType, Bundle params) {
