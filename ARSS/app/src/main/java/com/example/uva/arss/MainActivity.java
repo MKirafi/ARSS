@@ -119,9 +119,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 System.out.println("Wrapped rows " + wrapped.rows());
                 System.out.println("Wrapped type " + wrapped.type());
 //                return withOutLines;
-                if(wrapped.rows() != mat.rows() || wrapped.cols() != mat.cols()) {
-                    Imgproc.resize(wrapped, wrapped, new Size(mat.rows(), mat.cols()));
+                if(wrapped.rows() != mat.cols() || wrapped.cols() != mat.rows()) {
+                    Imgproc.resize(wrapped, wrapped, new Size(mat.cols(), mat.rows()));
                 }
+//                if(wrapped.rows() != mat.rows() || wrapped.cols() != mat.cols()) {
+//                    Imgproc.resize(wrapped, wrapped, new Size(mat.rows(), mat.cols()));
+//                }
                 return wrapped;
             }
         }
