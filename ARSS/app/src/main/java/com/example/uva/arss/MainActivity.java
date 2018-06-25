@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -24,6 +25,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 Mat cutted = applyMask(mat, largest);
 
                 Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+                List<Mat> digitBoxes = getBoxes(wrapped);
                 if(wrapped.rows() != mat.cols() || wrapped.cols() != mat.rows()) {
                     Imgproc.resize(wrapped, wrapped, new Size(mat.cols(), mat.rows()));
                 }
@@ -130,6 +133,19 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         Imgproc.resize(matT, matF, matF.size(), 0, 0, 0);
         Core.flip(matF, original, 1);
         return original;
+    }
+
+    private List<Mat> getBoxes(Mat grid) {
+        float size = (float)grid.rows()/(float)9;
+        List<Mat> digitCells = Lists.newArrayList();
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                Rect rect = new Rect(new Point(col * size, row * size), new Size(size, size));
+                Mat digit = new Mat(grid, rect).clone();
+                digitCells.add(digit);
+            }
+        }
+        return digitCells;
     }
 
     private Mat preprocMat(Mat preprocMat) {
