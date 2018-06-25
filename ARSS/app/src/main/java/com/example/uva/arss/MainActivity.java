@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     CameraBridgeViewBase camera;
     Mat mat, matF, matT, hierarchy;
     BaseLoaderCallback baseLoaderCallback;
-    List<MatOfPoint> contours = new ArrayList<>();
     Size FOUR_CORNERS = new Size(1, 4);
 
     @Override
@@ -93,12 +92,16 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mat = preprocMat(mat);
         MatOfPoint largest = largestPolygon(mat);
         if(largest != null) {
+            MatOfPoint approxf1 = new MatOfPoint();
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
 
             if (Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
-                for (int i = 0; i < 20; i++) {
-                    System.out.println("FOUR CORNERS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + i);
-                }
+
+                aproxPolygon.convertTo(approxf1, CvType.CV_32S);
+                List<MatOfPoint> contourTemp = new ArrayList<>();
+                contourTemp.add(approxf1);
+                Imgproc.drawContours(mat, contourTemp, 0, new Scalar(255, 255, 255), 20);
+
                 int size = distance(aproxPolygon);
 
                 Mat cutted = applyMask(mat, largest);
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 return withOutLines;
             }
         }
+
         return mat;
     }
 
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     private Mat preprocMat(Mat preprocMat) {
-        Mat processed = new Mat();
+        Mat processed = new Mat(preprocMat.size(), CV_8UC4);
         Imgproc.cvtColor(preprocMat, processed, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.GaussianBlur(processed, processed, new Size(11, 11), 0);
         Imgproc.adaptiveThreshold(processed, processed, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 5, 2);
@@ -133,8 +137,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         double area, largestArea = 0;
         MatOfPoint largest = null;
         hierarchy = new Mat();
+        List<MatOfPoint> contours = new ArrayList<>();
 
-        Imgproc.findContours(mat.clone(), contours, hierarchy,RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(mat.clone(), contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
         for(int i = 0; i < contours.size(); i++) {
             area = contourArea(contours.get(i), false);
