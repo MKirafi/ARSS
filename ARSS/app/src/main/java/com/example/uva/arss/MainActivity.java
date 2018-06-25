@@ -4,6 +4,8 @@ package com.example.uva.arss;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -86,11 +89,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        System.out.println("CHECKPOINT 1");
         mat = inputFrame.rgba();
-
+        System.out.println("CHECKPOINT 2");
         mat = turnImg(mat);
         mat = preprocMat(mat);
+        System.out.println("CHECKPOINT 3");
         MatOfPoint largest = largestPolygon(mat);
+        System.out.println("CHECKPOINT 4");
         if(largest != null) {
             MatOfPoint approxf1 = new MatOfPoint();
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
@@ -107,17 +113,33 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 Mat cutted = applyMask(mat, largest);
 
                 Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
-                Mat preprocessed2 = preprocMat(wrapped);
-                Mat withOutLines = cleanLines(preprocessed2);
-
-                return withOutLines;
+//                Mat preprocessed2 = preprocMat(wrapped);
+//                Mat withOutLines = cleanLines(preprocessed2);
+                System.out.println("Wrapped cols " + wrapped.cols());
+                System.out.println("Wrapped rows " + wrapped.rows());
+                System.out.println("Wrapped type " + wrapped.type());
+//                return withOutLines;
+                if(wrapped.rows() != 1440 || wrapped.cols() != 1080) {
+                    Imgproc.resize(wrapped, wrapped, new Size(1440, 1080));
+                }
+                return wrapped;
             }
         }
-
+        System.out.println("rows: " + mat.rows() + " cols: " + mat.cols());
         return mat;
     }
 
     private Mat turnImg(Mat original) {
+//        Matrix matrix = new Matrix();
+//        Mat rotated = new Mat(original.cols(), original.rows(), CV_8UC4);
+//        matrix.setRotate(270);
+//        matrix.postScale(-1, 1);
+//        Bitmap bmp = Bitmap.createBitmap(original.cols(), original.rows(), Bitmap.Config.ARGB_8888);
+//        Utils.matToBitmap(original, bmp);
+//        Bitmap rotatedBmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+//        bmp.recycle();
+//        Utils.bitmapToMat(rotatedBmp, rotated);
+//        return rotated;
         Core.transpose(original, matT);
         Imgproc.resize(matT, matF, matF.size(), 0, 0, 0);
         Core.flip(matF, original, 1);
@@ -126,10 +148,15 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     private Mat preprocMat(Mat preprocMat) {
         Mat processed = new Mat(preprocMat.size(), CV_8UC4);
+        System.out.println("Channelssssssssssssssssssssssssssssssssssss: " + preprocMat.channels());
         Imgproc.cvtColor(preprocMat, processed, Imgproc.COLOR_RGBA2GRAY);
+        System.out.println("Channelzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz1: " + processed.channels());
         Imgproc.GaussianBlur(processed, processed, new Size(11, 11), 0);
+        System.out.println("Channelzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz2: " + processed.channels());
         Imgproc.adaptiveThreshold(processed, processed, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 5, 2);
+        System.out.println("Channelzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz3: " + processed.channels());
         Core.bitwise_not(processed, processed);
+        System.out.println("Channelzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz4: " + processed.channels());
         return processed;
     }
 
@@ -208,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private Mat wrapPerspective(int size, MatOfPoint2f src, Mat image) {
         Size reshape = new Size(size, size);
 
-        Mat undistorted = new Mat(reshape, CvType.CV_8UC1);
+        Mat undistorted = new Mat(reshape, CvType.CV_8UC4);
 
         MatOfPoint2f d = new MatOfPoint2f();
         d.fromArray(new Point(0, 0), new Point(0, reshape.width), new Point(reshape.height, 0),
@@ -242,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     @Override
     public void onCameraViewStarted(int width, int height) {
+        System.out.println("width: " + width + " height: " + height + "aaaaaaaaaaaaaaaaaaaa");
         mat = new Mat(height, width, CV_8UC4);
         matF = new Mat(height, width, CV_8UC4);
         matT = new Mat(width, width, CV_8UC4);
