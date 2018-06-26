@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,8 +35,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
     private TextView txtOutput;
-    private int CAMERA_REQUEST = 1888;
     private DrawView drawView;
+    private int CAMERA_REQUEST = 1;
+    private int GALLERY_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +61,21 @@ public class MainActivity extends AppCompatActivity {
         takeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_REQUEST);
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
+        });
+
+        Button loadImage = findViewById(R.id.load_image_button);
+        loadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                                       "content://media/internal/images/media"
+                ));
+                startActivityForResult(galleryIntent, GALLERY_REQUEST);
+            }
+
         });
 
 
@@ -118,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             //recognizeSudoku(photo);
+        }
+        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
         }
     }
 
