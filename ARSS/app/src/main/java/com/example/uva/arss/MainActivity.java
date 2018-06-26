@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             //recognizeSudoku(photo);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
         }
     }
 }
