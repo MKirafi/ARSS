@@ -28,7 +28,6 @@ public class VoiceCommand {
         int progress = 0;
         for (int i = index + keyword.length(); i < result.length(); i++) {
             char c = result.charAt(i);
-            System.out.println(c +  "letter");
             if(progress == 0 && ((c >= 'a' && c <= 'i') || (c >= 'A' && c <= 'I'))) {
                 m.setTranslatedX(c);
             } else if ((progress == 1 || progress == 2 ) && Character.isDigit(c)) {
@@ -61,6 +60,23 @@ public class VoiceCommand {
         this.result = result.replace("zeven ", "7");
         this.result = result.replace("acht ", "8");
         this.result = result.replace("negen ", "9");
+
+        this.result = result.replace("one ", "1");
+        this.result = result.replace("two ", "2");
+        this.result = result.replace("three ", "3");
+        this.result = result.replace("four ", "4");
+        this.result = result.replace("five ", "5");
+        this.result = result.replace("six ", "6");
+        this.result = result.replace("seven ", "7");
+        this.result = result.replace("eight ", "8");
+        this.result = result.replace("nine ", "9");
+
+        this.result = result.replace("for ", "4" );
+        this.result = result.replace("to ", "2" );
+
+        this.result = result.replace("liam ", "5" );
+        this.result = result.replace("pizza ", "9" );
+        this.result = result.replace("Pizza ", "9" );
     }
 
 
