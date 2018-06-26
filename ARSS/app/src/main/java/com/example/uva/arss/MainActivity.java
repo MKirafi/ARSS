@@ -23,21 +23,28 @@ import android.content.ActivityNotFoundException;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.SpeechRecognizer;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+
 import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
+
     private TextView txtOutput;
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
+
+    private String language = "en";
+    private SpeechRecognizer sr;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,41 +87,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.txtOutput = findViewById(R.id.txt_output);
-        this.intentManager = new IntentManager();
+
+        this.intentManager = new IntentManager(language);
+        this.sr = SpeechRecognizer.createSpeechRecognizer(this);
+        sr.setRecognitionListener(new speechListener());
 
         /* "record audio" button: */
-        findViewById(R.id.record_audio).setOnClickListener(new View.OnClickListener() {
+        View recordAudio = findViewById(R.id.record_audio);
+        recordAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    startActivityForResult(intentManager.intent, 1);
-                } catch (ActivityNotFoundException a) {
-                    Toast.makeText(getApplicationContext(),
-                            "No speech. No gain. Pls buy a new  phone.",
-                            Toast.LENGTH_SHORT).show();
-                }
+                String instruction = (language == "en")
+                        ?"Say: location X Y Value. Ex: location A3 7."
+                        : "Zeg: plaats X Y Waarde. Vb: plaats A3 7";
+                Toast.makeText(getApplicationContext(),
+                        instruction,
+                        Toast.LENGTH_LONG).show();
+                sr.startListening(intentManager.getIntent());
             }
         });
-
-//        Paint paint = new Paint();
-//        paint.setColor(Color.BLACK);
-//        Canvas canvas = new Canvas();
-//        canvas.drawLine(width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(2 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(3 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(4 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(5 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(6 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(7 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(8 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(9 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        canvas.drawLine(10 * width/11, 10, width - (width/11), height*9 + 10 , paint);
-//        view.draw(canvas);
-
-//        drawView = new DrawView(this, width, height);
-//        drawView.setBackgroundColor(Color.TRANSPARENT);
-//        setContentView(drawView);
-
     }
 
     private void checkPermission(){
@@ -133,9 +124,55 @@ public class MainActivity extends AppCompatActivity {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             //recognizeSudoku(photo);
         }
-        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
+//        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+//            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
+//        }
+
+
+    }
+
+    class speechListener implements RecognitionListener {
+
+        public void onReadyForSpeech(Bundle params) {
+        }
+
+        public void onBeginningOfSpeech() {
+        }
+
+        public void onRmsChanged(float rmsdB) {
+        }
+
+        public void onBufferReceived(byte[] buffer) {
+        }
+
+        public void onEndOfSpeech() {
+        }
+
+        public void onError(int error) {
+        }
+
+        public void onResults(Bundle results) {
+            System.out.println("test123");
+            String res = results.getStringArrayList(sr.RESULTS_RECOGNITION).get(0);
+            VoiceCommand command = new VoiceCommand(res, language);
+            Move m = command.getMove();
+            if (!m.isValid()) {
+                Toast.makeText(getApplicationContext(),
+                        "Could not parse move.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        m.getX() + " " + m.getY() + " " + m.getValue(),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
+        public void onPartialResults(Bundle partialResults) {
+        }
+
+        public void onEvent(int eventType, Bundle params) {
         }
     }
+
 
 }
