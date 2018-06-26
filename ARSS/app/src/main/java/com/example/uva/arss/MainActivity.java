@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
@@ -37,14 +38,11 @@ import android.widget.Toast;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    private IntentManager intentManager;
-
-    private TextView txtOutput;
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
-
-    private String language = "en";
+    
+    private String language = "nl_NL";
     private SpeechRecognizer sr;
 
 
@@ -137,10 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-        this.txtOutput = findViewById(R.id.txt_output);
-
-        this.intentManager = new IntentManager(language);
         this.sr = SpeechRecognizer.createSpeechRecognizer(this);
         sr.setRecognitionListener(new speechListener());
 
@@ -155,8 +149,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         instruction,
                         Toast.LENGTH_LONG).show();
-                sr.startListening(intentManager.getIntent());
+                //System.out.println(intentManager.getIntent().toString() + " intent");
+                sr.startListening(new IntentManager(language).getIntent());
             }
+        });
+
+        Spinner languageSpinner = (Spinner)this.findViewById(R.id.language_spinner);
+
+        /* Switching between colors: */
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0) {
+                    language = "nl_NL";
+                } else {
+                    language = "en";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
@@ -170,6 +182,13 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermission(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        }
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
     }
 
@@ -214,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onError(int error) {
+            System.out.println(error + " error!!");
         }
 
         public void onResults(Bundle results) {
