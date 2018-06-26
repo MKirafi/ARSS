@@ -4,6 +4,8 @@ package com.example.uva.arss;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -30,6 +33,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         };
     }
 
+    public int[][] recognizeSudoku(Bitmap input) {
+        int[][] sudoku = new int[9][9];
+        Mat mat = new Mat();
+        Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, mat);
+        return sudoku;
+    }
+
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
@@ -94,14 +106,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         MatOfPoint largest = largestPolygon(mat);
 
         if(largest != null) {
-            MatOfPoint approxf1 = new MatOfPoint();
+//            MatOfPoint approxf1 = new MatOfPoint();
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
 
             if (Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
-                aproxPolygon.convertTo(approxf1, CvType.CV_32S);
-                List<MatOfPoint> contourTemp = new ArrayList<>();
-                contourTemp.add(approxf1);
-                Imgproc.drawContours(mat, contourTemp, 0, new Scalar(255, 255, 255), 20);
+//                aproxPolygon.convertTo(approxf1, CvType.CV_32S);
+//                List<MatOfPoint> contourTemp = new ArrayList<>();
+//                contourTemp.add(approxf1);
+//                Imgproc.drawContours(mat, contourTemp, 0, new Scalar(255, 255, 255), 20);
 
                 int size = distance(aproxPolygon);
 
@@ -312,4 +324,11 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         }
     }
 
+}
+
+class DigitRecognizer {
+    void ReadMINSTData() {
+        File external_storage = Environment.getExternalStorageDirectory();
+        File
+    }
 }
