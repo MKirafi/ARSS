@@ -37,13 +37,11 @@ import android.widget.Toast;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    private IntentManager intentManager;
-
-    private TextView txtOutput;
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
 
+    private IntentManager intentManager;
     private String language = "en";
     private SpeechRecognizer sr;
 
@@ -137,9 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-        this.txtOutput = findViewById(R.id.txt_output);
-
         this.intentManager = new IntentManager(language);
         this.sr = SpeechRecognizer.createSpeechRecognizer(this);
         sr.setRecognitionListener(new speechListener());
@@ -155,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         instruction,
                         Toast.LENGTH_LONG).show();
+                //System.out.println(intentManager.getIntent().toString() + " intent");
                 sr.startListening(intentManager.getIntent());
             }
         });
@@ -173,21 +169,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Callback for speech recognition activity
-     * */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            //recognizeSudoku(photo);
-        }
-//        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-//            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
+//    /**
+//     * Callback for speech recognition activity
+//     * */
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            //recognizeSudoku(photo);
 //        }
-
-    }
+////        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+////            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
+////        }
+//
+//    }
 
     class speechListener implements RecognitionListener {
 
@@ -207,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onError(int error) {
+            System.out.println(error + " error!!");
         }
 
         public void onResults(Bundle results) {

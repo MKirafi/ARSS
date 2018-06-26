@@ -11,7 +11,7 @@ public class IntentManager {
     private Intent intent;
     public IntentManager(String lang) {
         String prompt = (lang == "en")
-            ?"Say: location X Y Value. Ex: location A3 7."
+                ?"Say: location X Y Value. Ex: location A3 7."
                 : "Zeg: plaats X Y Waarde. Vb: plaats A3 7";
 
         this.intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
