@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
-    private String language = "en";
+    private String language = "nl_NL";
     private SpeechRecognizer sr;
 
     @Override
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onError(int error) {
+            System.out.println(error + " error");
         }
 
         public void onResults(Bundle results) {

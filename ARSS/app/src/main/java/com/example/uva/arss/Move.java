@@ -69,7 +69,7 @@ public class Move {
         return this.coordinate[1];
     }
 
-    int getValue() { return this.value;; }
+    int getValue() { return this.value; }
 
     // Returns a number from a translated char.
     // A -> 0, B -> 1, C -> 2 ...
