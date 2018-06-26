@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -34,6 +35,9 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
+import org.opencv.ml.KNearest;
+import static org.opencv.imgproc.Imgproc.moments;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +56,11 @@ import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
 import static org.opencv.imgproc.Imgproc.approxPolyDP;
 import static org.opencv.imgproc.Imgproc.contourArea;
 import static org.opencv.imgproc.Imgproc.getPerspectiveTransform;
+import static org.opencv.imgproc.Imgproc.warpAffine;
 import static org.opencv.imgproc.Imgproc.warpPerspective;
+
+import static com.example.uva.arss.FeatureDetector.CONTAIN_DIGIT_SUB_MATRIX_DENSITY;
+import static org.opencv.ml.Ml.ROW_SAMPLE;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -60,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     Mat mat, matF, matT, hierarchy;
     BaseLoaderCallback baseLoaderCallback;
     Size FOUR_CORNERS = new Size(1, 4);
+    final int SZ = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +136,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 Mat cutted = applyMask(mat, largest);
 
                 Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
-                List<Mat> digitBoxes = getBoxes(wrapped);
+                List<Integer> sudoku = extractCells(wrapped);
+                for (int i : sudoku) {
+                    System.out.print("Value: " + i);
+                }
                 if(wrapped.rows() != mat.cols() || wrapped.cols() != mat.rows()) {
                     Imgproc.resize(wrapped, wrapped, new Size(mat.cols(), mat.rows()));
                 }
@@ -283,22 +295,141 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
     );
 
-    private void getDigit() {
-        int sz = 20;
-        URL file = getClass().getResource("\\digits.png");
-        Size cellSize = new Size(sz, sz);
+    private List<Integer> extractCells(Mat m) {
+        List<Mat> cells = getBoxes(m);
+        List<Optional<Rect>> digitBoxes = Lists.transform(cells, FeatureDetector.GET_DIGIT_BOX_BYTE_SUM);
+
+        List<Integer> result = Lists.newArrayList();
+        List<Mat> cuts = Lists.newArrayList();
+        /* zip... zip! :'( */
+
+        for(int i = 0; i < cells.size(); i++ ) {
+            Mat cell = cells.get(i);
+            Optional<Rect> box = digitBoxes.get(i);
+
+            int d = 0;
+
+            if (box.isPresent() && CONTAIN_DIGIT_SUB_MATRIX_DENSITY.apply(cell)) {
+                /* cut current cell to the finded box */
+                Mat cutted = new Mat(cell, box.get()).clone();
+                Imgproc.rectangle(cell, box.get().tl(), box.get().br(), Scalar.all(255));
+                cuts.add(cutted);
+                d = digitRecog(cutted);
+            }
+
+            Imgproc.rectangle(cell, new Point(0,0), new Point(100,100), Scalar.all(255));
+
+            result.add(d);
+
+        }
+
+        return result;
+    }
+
+    // This function regocnizes a digit from an input cell using knearest neighbor and training
+    // data.
+    private Integer digitRecog(Mat cell) {
+        Mat warped = deskew(center(cell.clone()));
+        Mat result = new Mat();
+        Mat neighborhood = new Mat();
+        Mat distances = new Mat();
+
+        KNearest knn = loadTrainData();
+        knn.findNearest(singleRowConvert(cell), 3, result, neighborhood, distances);
+        return (int)result.get(0, 0)[0];
+    }
+
+    // This function loads the training data and creates the k-nearest neighbour model.
+    private KNearest loadTrainData() {
+        KNearest knn;
+        URL file = getClass().getResource("/digits.png");
+        Size digitSize = new Size(SZ, SZ);
         Mat trainData = imread(file.getPath(), 0);
 
         int cols = trainData.width() / 20;
         int rows = trainData.height() / 20;
-        int amtPerNumber = (cols * rows) / 10;
+        int digitPerLabel = (cols * rows) / 10;
 
-
-        Mat samples = Mat.zeros(cols * rows, sz * sz, CvType.CV_32FC1);
+        Mat samples = Mat.zeros(cols * rows, SZ * SZ, CvType.CV_32FC1);
         Mat labels = Mat.zeros(cols * rows, 1, CvType.CV_32FC1);
 
-        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                Rect currentDigit = new Rect(new Point(j * SZ, i * SZ), digitSize);
+                int index = i * cols + j;
+                double label = (j + i * cols) / digitPerLabel;
+                Mat cell = deskew(new Mat(trainData, currentDigit));
+                Mat singleRow = singleRowConvert(cell);
+
+                for (int k = 0; k < SZ * SZ; k++) {
+                    samples.put(index, k, singleRow.get(0, k));
+                }
+                labels.put(index, 0, label);
+            }
+        }
+
+        knn = KNearest.create();
+        knn.train(samples, ROW_SAMPLE,labels);
+        return knn;
     }
+
+    // This function converts a mat to a mat image with all data on a single row. This is for
+    // the knn implementation since it takes every sample on a different row.
+    private Mat singleRowConvert(Mat img) {
+        Mat result = Mat.zeros(1, SZ * SZ, CvType.CV_32FC1);
+        for (int row = 0; row < img.rows(); row++) {
+            for (int col = 0; col < img.cols(); col++) {
+                double data = img.get(row, col)[0] / 255.0;
+                int index = SZ * row + col;
+                result.put(0, index, data);
+            }
+        }
+        return result;
+    }
+
+    // This function deskews skewed digits from the training data.
+    public Mat deskew(Mat img) {
+        Moments m = moments(img);
+
+        if (Math.abs(m.get_mu02()) < 0.01) {
+            return img.clone();
+        }
+        Mat result = new Mat(img.size(), CvType.CV_32FC1);
+        double skew = m.get_mu11() / m.get_mu02();
+        Mat M = new Mat(2, 3, CvType.CV_32FC1);
+
+        M.put(0, 0, 1, skew, -0.5 * SZ * skew, 0, 1, 0);
+
+        warpAffine(img, result, M, new Size(SZ, SZ), Imgproc.WARP_INVERSE_MAP | Imgproc.INTER_LINEAR);
+
+        return result;
+    }
+
+    // This function centers digits.
+    private Mat center(Mat digit) {
+        Mat res = Mat.zeros(digit.size(), CvType.CV_32FC1);
+
+        double s = 1.5*digit.height()/SZ;
+
+        Moments m = moments(digit);
+
+        double c1_0 = m.get_m10()/m.get_m00();
+        double c1_1 = m.get_m01()/m.get_m00();
+
+        double c0_0= SZ/2, c0_1 = SZ/2;
+
+        double t_0 = c1_0 - s*c0_0;
+        double t_1 = c1_1 - s*c0_1;
+
+        Mat A = Mat.zeros( new Size(3, 2), CvType.CV_32FC1);
+
+        A.put(0,0, s, 0, t_0);
+        A.put(1,0, 0, s, t_1);
+
+        warpAffine(digit, res, A, new Size(SZ, SZ), Imgproc.WARP_INVERSE_MAP | Imgproc.INTER_LINEAR);
+        return res;
+    }
+
 
     @Override
     public void onCameraViewStarted(int width, int height) {
