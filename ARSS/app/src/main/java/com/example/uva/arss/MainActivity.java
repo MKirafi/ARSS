@@ -183,9 +183,16 @@ public class MainActivity extends AppCompatActivity {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             //recognizeSudoku(photo);
         }
-//        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-//            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
-//        }
+        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+             Uri imageUri = data.getData();
+             try {
+                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+             }
+             catch(java.io.IOException e) {
+                 System.out.println("Something went wrong.");
+             }
+
+        }
 
     }
 
