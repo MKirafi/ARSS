@@ -30,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     
     private String language = "nl_NL";
     private SpeechRecognizer sr;
+    private int[] startSudoku;
 
 
     @Override
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 0,0,1,0,0,0,0,6,8,
                 0,0,8,5,0,0,0,1,0,
                 0,9,0,0,0,0,4,0,0};
+        this.startSudoku = sud;
 
         int[] sud2 = {0,0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,0,
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String instruction = (language == "en")
-                        ?"Say: location X Y Value. Ex: location A3 7."
+                        ?"Say: location X Y Value. Ex: location B3 7."
                         : "Zeg: plaats X Y Waarde. Vb: plaats A3 7";
                 Toast.makeText(getApplicationContext(),
                         instruction,
@@ -215,6 +218,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public boolean isEditable(int x, int y) {
+        return startSudoku[y*9 + x] == 0;
+    }
+
+    public void setCell(int x, int y, int value, boolean permanent) {
+        String cell = "row" + y + "column" + x;
+        String stringValue = "" + value;
+        EditText editText = (EditText) findViewById(getResources().getIdentifier(cell, "id", getPackageName()));
+        editText.setText(stringValue);
+        if (permanent)
+            editText.setEnabled(false);
+    }
+
+
     class speechListener implements RecognitionListener {
 
         public void onReadyForSpeech(Bundle params) {
@@ -243,12 +260,21 @@ public class MainActivity extends AppCompatActivity {
             Move m = command.getMove();
             if (!m.isValid()) {
                 Toast.makeText(getApplicationContext(),
-                        "Could not parse move.",
-                        Toast.LENGTH_LONG).show();
+                        "Could not parse move. ",
+                        Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(),
-                        m.getX() + " " + m.getY() + " " + m.getValue(),
-                        Toast.LENGTH_LONG).show();
+                int x = m.getX();
+                int y = m.getY();
+                int value = m.getValue();
+
+                if(isEditable(x, y)) {
+                    setCell(x, y, value, false);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Tried to modify non editable cell.",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
@@ -258,6 +284,5 @@ public class MainActivity extends AppCompatActivity {
         public void onEvent(int eventType, Bundle params) {
         }
     }
-
 
 }
