@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ARSS</string>
+    <string-array name="language_array">
+        <item>Nederlands</item>
+        <item>English</item>
+    </string-array>
 </resources>

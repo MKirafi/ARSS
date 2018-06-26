@@ -1,10 +1,31 @@
 package com.example.uva.arss;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+
+import org.w3c.dom.*;
 import android.content.ActivityNotFoundException;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -14,11 +35,49 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
     private TextView txtOutput;
+    private DrawView drawView;
+    private int CAMERA_REQUEST = 1;
+    private int GALLERY_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        Spinner language_spinner = (Spinner) findViewById(R.id.language_spinner);
+        ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.
+                    createFromResource(this, R.array.language_array, android.R.layout.simple_spinner_item);
+        languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        language_spinner.setAdapter(languageAdapter);
+
+        checkPermission();
+
+        Button takeImage = findViewById(R.id.take_image_button);
+        takeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        });
+
+        Button loadImage = findViewById(R.id.load_image_button);
+        loadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                                       "content://media/internal/images/media"
+                ));
+                startActivityForResult(galleryIntent, GALLERY_REQUEST);
+            }
+
+        });
+
 
         this.txtOutput = findViewById(R.id.txt_output);
         this.intentManager = new IntentManager();
@@ -36,6 +95,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        Paint paint = new Paint();
+//        paint.setColor(Color.BLACK);
+//        Canvas canvas = new Canvas();
+//        canvas.drawLine(width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(2 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(3 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(4 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(5 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(6 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(7 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(8 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(9 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        canvas.drawLine(10 * width/11, 10, width - (width/11), height*9 + 10 , paint);
+//        view.draw(canvas);
+
+//        drawView = new DrawView(this, width, height);
+//        drawView.setBackgroundColor(Color.TRANSPARENT);
+//        setContentView(drawView);
+
+    }
+
+    private void checkPermission(){
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
     }
 
     /**
@@ -44,23 +129,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 1: {
-                if (resultCode == RESULT_OK && null != data) {
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String text = result.get(0);
-                    txtOutput.setText(text);
-                }
-                break;
-            }
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            //recognizeSudoku(photo);
+        }
+        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
         }
     }
+
 }
-
-
-
-
-
-
-
