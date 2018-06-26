@@ -4,11 +4,13 @@ package com.example.uva.arss;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
@@ -34,12 +36,17 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static org.opencv.core.CvType.CV_8UC4;
+import static org.opencv.imgcodecs.Imgcodecs.imread;
 import static org.opencv.imgproc.Imgproc.CHAIN_APPROX_SIMPLE;
 import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
 import static org.opencv.imgproc.Imgproc.approxPolyDP;
@@ -276,6 +283,23 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
     );
 
+    private void getDigit() {
+        int sz = 20;
+        URL file = getClass().getResource("\\digits.png");
+        Size cellSize = new Size(sz, sz);
+        Mat trainData = imread(file.getPath(), 0);
+
+        int cols = trainData.width() / 20;
+        int rows = trainData.height() / 20;
+        int amtPerNumber = (cols * rows) / 10;
+
+
+        Mat samples = Mat.zeros(cols * rows, sz * sz, CvType.CV_32FC1);
+        Mat labels = Mat.zeros(cols * rows, 1, CvType.CV_32FC1);
+
+        
+    }
+
     @Override
     public void onCameraViewStarted(int width, int height) {
 
@@ -324,11 +348,4 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         }
     }
 
-}
-
-class DigitRecognizer {
-    void ReadMINSTData() {
-        File external_storage = Environment.getExternalStorageDirectory();
-        File
-    }
 }
