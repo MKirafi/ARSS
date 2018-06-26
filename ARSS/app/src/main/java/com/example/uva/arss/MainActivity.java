@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import org.w3c.dom.*;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import android.content.ActivityNotFoundException;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -29,12 +33,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.Arrays;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
@@ -129,10 +138,9 @@ public class MainActivity extends AppCompatActivity {
         loadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent galleryIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(
-                                       "content://media/internal/images/media"
-                ));
-                startActivityForResult(galleryIntent, GALLERY_REQUEST);
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
             }
 
         });
@@ -181,12 +189,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            //recognizeSudoku(photo);
+            fillSudoku(photo);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
              Uri imageUri = data.getData();
              try {
-                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                 Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                 fillSudoku(photo);
              }
              catch(java.io.IOException e) {
                  System.out.println("Something went wrong.");
@@ -196,6 +205,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void setCell(int x, int y, int value, boolean permanent) {
+        String cell = "row" + x + "column" + y;
+        String stringValue = "" + value;
+        EditText editText = (EditText) findViewById(getResources().getIdentifier(cell, "id", getPackageName()));
+        editText.setText(stringValue);
+        if (permanent)
+            editText.setEnabled(false);
+    }
+
+    public void fillSudoku(Bitmap bitmap) {
+        int[] sud = recognizeSudoku(bitmap);
+        for(int i = 0; i < sud.length; i++) {
+            if (sud[i] != 0) {
+                setCell(i / 9, i % 9, sud[i], true);
+            }
+        }
+    }
     class speechListener implements RecognitionListener {
 
         public void onReadyForSpeech(Bundle params) {
