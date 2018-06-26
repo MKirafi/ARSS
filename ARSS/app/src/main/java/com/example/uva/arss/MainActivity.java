@@ -192,21 +192,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    /**
-//     * Callback for speech recognition activity
-//     * */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            //recognizeSudoku(photo);
+    /**
+     * Callback for speech recognition activity
+     * */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            //recognizeSudoku(photo);
+        }
+//        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+//            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
 //        }
-////        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-////            GALLERY_REQUEST.loadFromInputStream(this.getContentResolver().openInputStream(it.getData()));
-////        }
-//
-//    }
+
+    }
 
     class speechListener implements RecognitionListener {
 
