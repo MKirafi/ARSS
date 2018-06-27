@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
@@ -48,15 +49,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity {
-    private IntentManager intentManager;
-
-    private TextView txtOutput;
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
-
-    private String language = "en";
+    
+    private String language = "nl_NL";
     private SpeechRecognizer sr;
+    private int[] startSudoku;
+    private int[] currentSudoku;
 
 
     @Override
@@ -106,15 +106,175 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,0};
 
+        this.startSudoku = sud;
+        this.currentSudoku = sud2;
+
         BruteSudoku bruteSudoku = new BruteSudoku(grid);
 
-        long startTime = System.currentTimeMillis();
-//        int[][] newGrid = bruteSudoku.solveSudoku(grid);
-        Sudoku.solve(sud2, 0);
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
+        long startTime = System.nanoTime();;
+//        for(int i = 0; i < 25; i ++){
+//            System.out.println(i + "loooooooooooooooooooooop");
+//            Sudoku.solve(sud2.clone(), 0);
+//            System.out.println(System.nanoTime());
+//        }
+        int[] clone;
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+        clone = sud;
+        Sudoku.solve(clone, 0);
+        print(clone);
+
+        long stopTime = System.nanoTime();
+        long elapsedTime = (stopTime - startTime);
+        System.out.println("=================================================");
         System.out.println(elapsedTime);
-        print(sud2);
+        System.out.println("=================================================");
+        //print(sud2);
 
         setContentView(R.layout.activity_main);
 
@@ -146,10 +306,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-        this.txtOutput = findViewById(R.id.txt_output);
-
-        this.intentManager = new IntentManager(language);
         this.sr = SpeechRecognizer.createSpeechRecognizer(this);
         sr.setRecognitionListener(new speechListener());
 
@@ -159,18 +315,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String instruction = (language == "en")
-                        ?"Say: location X Y Value. Ex: location A3 7."
+                        ?"Say: location X Y Value. Ex: location B3 7."
                         : "Zeg: plaats X Y Waarde. Vb: plaats A3 7";
                 Toast.makeText(getApplicationContext(),
                         instruction,
                         Toast.LENGTH_LONG).show();
-                sr.startListening(intentManager.getIntent());
+                //System.out.println(intentManager.getIntent().toString() + " intent");
+                sr.startListening(new IntentManager(language).getIntent());
             }
         });
 
+        Spinner languageSpinner = (Spinner)this.findViewById(R.id.language_spinner);
 
+        /* Switching between colors: */
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0) {
+                    language = "nl_NL";
+                } else {
+                    language = "en";
+                }
+            }
 
-
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     public static void print(int[] grid) {
@@ -183,6 +353,13 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermission(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        }
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
     }
 
@@ -208,6 +385,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public boolean isEditable(int x, int y) {
+        return startSudoku[y*9 + x] == 0;
     }
 
     public void setCell(int x, int y, int value, boolean permanent) {
@@ -245,21 +426,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onError(int error) {
+            System.out.println(error + " error!!");
         }
 
         public void onResults(Bundle results) {
-            System.out.println("test123");
             String res = results.getStringArrayList(sr.RESULTS_RECOGNITION).get(0);
             VoiceCommand command = new VoiceCommand(res, language);
             Move m = command.getMove();
             if (!m.isValid()) {
                 Toast.makeText(getApplicationContext(),
-                        "Could not parse move.",
-                        Toast.LENGTH_LONG).show();
+                        "Could not parse move. ",
+                        Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(),
-                        m.getX() + " " + m.getY() + " " + m.getValue(),
-                        Toast.LENGTH_LONG).show();
+                int x = m.getX();
+                int y = m.getY();
+                int value = m.getValue();
+
+                if(isEditable(x, y)) {
+                    setCell(y, x, value, false);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Tried to modify non editable cell.",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
@@ -269,6 +459,5 @@ public class MainActivity extends AppCompatActivity {
         public void onEvent(int eventType, Bundle params) {
         }
     }
-
 
 }
