@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private String language = "nl_NL";
     private SpeechRecognizer sr;
     private int[] startSudoku;
-    private int[] currentSudoku;
 
 
     @Override
@@ -99,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0};
 
         this.startSudoku = sud;
-        this.currentSudoku = sud2;
 
         BruteSudoku bruteSudoku = new BruteSudoku(grid);
 
@@ -155,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         instruction,
                         Toast.LENGTH_LONG).show();
-                //System.out.println(intentManager.getIntent().toString() + " intent");
                 sr.startListening(new IntentManager(language).getIntent());
             }
         });
@@ -222,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isEditable(int x, int y) {
-        return startSudoku[y*9 + x] == 0;
+        return this.startSudoku[y*9 + x] == 0;
     }
 
     public void setCell(int x, int y, int value, boolean permanent) {
@@ -232,6 +229,20 @@ public class MainActivity extends AppCompatActivity {
         editText.setText(stringValue);
         if (permanent)
             editText.setEnabled(false);
+    }
+
+    public int[] getSudoku() {
+        int[] sudoku = new int[81];
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                String selector = "row" + i + "column" + j;
+                EditText cell = (EditText) findViewById(getResources().getIdentifier(selector, "id", getPackageName()));
+                String cellText = cell.getText().toString();
+                cellText = cellText.equals("") ? "0" : cellText;
+                sudoku[i*9 + j] = Integer.parseInt(cellText);
+            }
+        }
+        return sudoku;
     }
 
 
@@ -272,6 +283,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if(isEditable(x, y)) {
                     setCell(y, x, value, false);
+                    int[] sudoku = getSudoku();
+                    System.out.println(sudoku.length);
+                    for (int cell : sudoku) {
+                        System.out.print(" " + cell + " ");
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Tried to modify non editable cell.",
