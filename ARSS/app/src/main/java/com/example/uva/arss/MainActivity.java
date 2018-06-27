@@ -161,12 +161,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int[] sudoku = getSudoku();
-                boolean valid = Sudoku.valid(sudoku);
+                boolean valid = Sudoku.solveSudoku(sudoku, 0) != null;
                 boolean complete = Sudoku.complete(sudoku);
 
                 Toast.makeText(getApplicationContext(),
                         "Sudoku is\n" + "valid: " + valid + "\n" + "complete: " + complete,
                         Toast.LENGTH_LONG).show();
+            }
+        });
+
+        /* "solve sudoku" button: */
+        View solveSudoku = findViewById(R.id.solve_sudoku);
+        solveSudoku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] sudoku = getSudoku();
+                int[] solved = Sudoku.solveSudoku(sudoku, 0);
+                if(solved == null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Sudoku is unsolvable.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    fillSudokuWithGrid(solved, false);
+                }
             }
         });
 
@@ -238,10 +255,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setCell(int x, int y, int value, boolean permanent) {
         String cell = "row" + x + "column" + y;
-        String stringValue = "" + value;
+        String stringValue = value == 0 ? "" : "" + value;
         EditText editText = (EditText) findViewById(getResources().getIdentifier(cell, "id", getPackageName()));
         editText.setText(stringValue);
-        if (permanent)
+        if (permanent && value != 0)
             editText.setEnabled(false);
     }
 
@@ -261,9 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void fillSudokuWithGrid(int[] grid, boolean permanent) {
         for(int i = 0; i < grid.length; i++) {
-            if (grid[i] != 0) {
-                setCell(i / 9, i % 9, grid[i], permanent);
-            }
+            setCell(i / 9, i % 9, grid[i], permanent);
         }
     }
 
