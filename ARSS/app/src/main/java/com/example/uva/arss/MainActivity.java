@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 Rect rect = new Rect(new Point(col * size, row * size), new Size(size, size));
                 Mat digit = new Mat(grid, rect).clone();
                 digitCells.add(digit);
+                System.out.println(row * 9 + col);
             }
         }
         return digitCells;
