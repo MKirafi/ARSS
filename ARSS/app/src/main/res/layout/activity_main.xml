@@ -115,102 +115,119 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row0column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:layout_height="30dp"
+                android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row0column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row0column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row0column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row0column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row0column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row0column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row0column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row0column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -232,102 +249,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row1column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row1column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row1column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row1column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row1column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row1column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row1column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row1column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row1column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -349,102 +384,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
             android:background="@drawable/edittext_bg"
             android:id="@+id/row2column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
             android:background="@drawable/edittext_bg"
             android:id="@+id/row2column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
             android:background="@drawable/edittext_bg"
             android:id="@+id/row2column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row2column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row2column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row2column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row2column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row2column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row2column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -466,102 +519,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row3column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row3column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row3column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row3column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row3column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row3column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row3column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row3column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row3column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -583,102 +654,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row4column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row4column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row4column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row4column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row4column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row4column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row4column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row4column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row4column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -700,102 +789,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row5column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row5column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row5column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row5column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row5column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row5column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row5column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row5column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row5column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -817,102 +924,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row6column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row6column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row6column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row6column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row6column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row6column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row6column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row6column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row6column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -934,102 +1059,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row7column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row7column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row7column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row7column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row7column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row7column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row7column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row7column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row7column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -1051,102 +1194,120 @@
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row8column0"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row8column1"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row8column2"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row8column3"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row8column4"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittextgray_bg"
             android:id="@+id/row8column5"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row8column6"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row8column7"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <EditText
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+
             android:layout_width="0dp"
                 android:background="@drawable/edittext_bg"
             android:id="@+id/row8column8"
             android:digits="123456789"
             android:inputType="number"
             android:maxLength="1"
-      android:textAlignment="center"/>
+      android:textAlignment="center"
+        android:layout_height="30dp"
+        android:textSize="30dp"/>
 
             <Space
                 android:layout_width="0dp"
@@ -1210,5 +1371,33 @@
         app:layout_constraintBottom_toTopOf="@+id/record_audio"
         app:layout_constraintEnd_toEndOf="@+id/GridLayout1"
         app:layout_constraintTop_toBottomOf="@+id/GridLayout1" />
+
+    <Button
+        android:id="@+id/check_sudoku"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="134dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:text="check"
+        app:layout_constraintBottom_toTopOf="@+id/record_audio"
+        app:layout_editor_absoluteX="149dp"
+        app:layout_editor_absoluteY="447dp" />
+
+    <!--<Button-->
+        <!--android:id="@+id/solve_sudoku"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginEnd="134dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="solve"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/record_audio"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/language_spinner"-->
+        <!--app:layout_constraintStart_toStartOf="2idt"-->
+        <!--app:layout_editor_absoluteX="149dp"-->
+        <!--app:layout_editor_absoluteY="447dp" />-->
 
 </android.support.constraint.ConstraintLayout>

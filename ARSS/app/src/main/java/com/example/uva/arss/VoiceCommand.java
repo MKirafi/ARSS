@@ -28,7 +28,6 @@ public class VoiceCommand {
         int progress = 0;
         for (int i = index + keyword.length(); i < result.length(); i++) {
             char c = result.charAt(i);
-            System.out.println(c +  "letter");
             if(progress == 0 && ((c >= 'a' && c <= 'i') || (c >= 'A' && c <= 'I'))) {
                 m.setTranslatedX(c);
             } else if ((progress == 1 || progress == 2 ) && Character.isDigit(c)) {
