@@ -220,15 +220,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fillSudoku(Bitmap bitmap) {
-        int[] sud = {8,0,0,0,0,0,0,0,0,
-                0,0,3,6,0,0,0,0,0,
-                0,7,0,0,9,0,2,0,0,
-                0,5,0,0,0,7,0,0,0,
-                0,0,0,0,4,5,7,0,0,
-                0,0,0,1,0,0,0,3,0,
-                0,0,1,0,0,0,0,6,8,
-                0,0,8,5,0,0,0,1,0,
-                0,9,0,0,0,0,4,0,0};
+        int[] sud = recognizeSudoku(bitmap);
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
                 setCell(i / 9, i % 9, sud[i], true);
