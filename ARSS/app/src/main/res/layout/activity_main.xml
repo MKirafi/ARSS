@@ -34,6 +34,13 @@
 
     </GridLayout>
 
+    <ImageView
+        android:id="@+id/digits"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/digits"
+        android:visibility="invisible"/>
+
     <Button
         android:id="@+id/load_image_button"
         android:layout_width="0dp"

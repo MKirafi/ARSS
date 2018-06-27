@@ -37,6 +37,10 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 import org.opencv.ml.KNearest;
+
+import static org.opencv.core.CvType.CV_8U;
+import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_ANYDEPTH;
+import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_COLOR;
 import static org.opencv.imgproc.Imgproc.moments;
 
 import java.io.File;
@@ -174,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 Rect rect = new Rect(new Point(col * size, row * size), new Size(size, size));
                 Mat digit = new Mat(grid, rect).clone();
                 digitCells.add(digit);
-                System.out.println(row * 9 + col);
+//                System.out.println(row * 9 + col);
             }
         }
         return digitCells;
@@ -315,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 Mat cutted = new Mat(cell, box.get()).clone();
                 Imgproc.rectangle(cell, box.get().tl(), box.get().br(), Scalar.all(255));
                 cuts.add(cutted);
+                System.out.println("a: " + i);
                 d = digitRecog(cutted);
             }
 
@@ -337,16 +342,25 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         KNearest knn = loadTrainData();
         knn.findNearest(singleRowConvert(cell), 3, result, neighborhood, distances);
+        System.out.println("Value!!!!!!!!!!!!!!!!!: " + result.get(0, 0)[0]);
         return (int)result.get(0, 0)[0];
     }
 
     // This function loads the training data and creates the k-nearest neighbour model.
     private KNearest loadTrainData() {
         KNearest knn;
-        URL file = getClass().getResource("/digits.png");
         Size digitSize = new Size(SZ, SZ);
-        Mat trainData = imread(file.getPath(), 0);
-
+        Mat trainData = new Mat();
+        try {
+            trainData = Utils.loadResource(getApplicationContext(), R.drawable.digits);
+        }
+        catch (Exception e) {
+            System.out.println("Loading failed!!!!!!!!!!!" + e.getMessage());
+            e.printStackTrace();
+        }
+//        System.out.println("trainData data: " + trainData.empty());
+//        System.out.println("trainData cols: " + trainData.width());
+//        System.out.println("trainData rows: " + trainData.height());
         int cols = trainData.width() / 20;
         int rows = trainData.height() / 20;
         int digitPerLabel = (cols * rows) / 10;
@@ -369,8 +383,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
         }
 
+        System.out.println("samples cols: " + samples.cols());
+        System.out.println("samples rows: " + samples.rows());
+        System.out.println("labels cols: " + labels.cols());
+        System.out.println("labels rows: " + labels.rows());
         knn = KNearest.create();
-        knn.train(samples, ROW_SAMPLE,labels);
+        knn.train(samples, ROW_SAMPLE, labels);
         return knn;
     }
 
