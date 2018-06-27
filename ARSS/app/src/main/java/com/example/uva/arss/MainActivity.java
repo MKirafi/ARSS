@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setCell(int x, int y, int value, boolean permanent) {
-        String cell = "row" + y + "column" + x;
+        String cell = "row" + x + "column" + y;
         String stringValue = "" + value;
         EditText editText = (EditText) findViewById(getResources().getIdentifier(cell, "id", getPackageName()));
         editText.setText(stringValue);
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                 int value = m.getValue();
 
                 if(isEditable(x, y)) {
-                    setCell(x, y, value, false);
+                    setCell(y, x, value, false);
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Tried to modify non editable cell.",
