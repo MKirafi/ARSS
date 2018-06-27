@@ -3,15 +3,21 @@
 package com.example.uva.arss;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.common.base.Function;
@@ -69,10 +75,11 @@ import static org.opencv.ml.Ml.ROW_SAMPLE;
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     CameraBridgeViewBase camera;
-    Mat mat, matF, matT, hierarchy;
+    Mat mat, matF, matT, hierarchy, mat2;
     BaseLoaderCallback baseLoaderCallback;
     Size FOUR_CORNERS = new Size(1, 4);
     final int SZ = 20;
+    KNearest knn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,16 +95,16 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             Toast.makeText(getApplicationContext(), "not loaded", Toast.LENGTH_SHORT).show();
         }
 
-        camera = (JavaCameraView) findViewById(R.id.myCameraView);
-        camera.setVisibility(SurfaceView.VISIBLE);
-        camera.setCvCameraViewListener(this);
+//        camera = (JavaCameraView) findViewById(R.id.myCameraView);
+//        camera.setVisibility(SurfaceView.VISIBLE);
+//        camera.setCvCameraViewListener(this);
 
         baseLoaderCallback = new BaseLoaderCallback(this) {
             @Override
             public void onManagerConnected(int status) {
                 switch (status) {
                     case BaseLoaderCallback.SUCCESS:
-                        camera.enableView();
+//                        camera.enableView();
                         break;
                     default:
                         super.onManagerConnected(status);
@@ -105,20 +112,50 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 }
             }
         };
+
+        ImageButton btn_choose_photo = (ImageButton) findViewById(R.id.load_image_button); // Replace with id of your button.
+        btn_choose_photo.setOnClickListener(btnChoosePhotoPressed);
     }
 
-    public int[][] recognizeSudoku(Bitmap input) {
-        int[][] sudoku = new int[9][9];
-        Mat mat = new Mat();
-        Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, mat);
-        return sudoku;
-    }
+    public View.OnClickListener btnChoosePhotoPressed = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            final int ACTIVITY_SELECT_IMAGE = 1234;
+            startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
+        }
+    };
 
     @Override
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                int[] sudoku = recognizeSudoku(photo);
+                if(sudoku != null) {
+                    for (int i : sudoku) {
+                        System.out.println("found: " + i);
+                    }
+                }
+                else {
+//                    Toast.makeText(getApplicationContext(), "Not found", Toast.LENGTH_LONG).show();
+                }
+            }
+            catch(java.io.IOException e) {
+                System.out.println("Something went wrong.");
+            }
 
-        mat = inputFrame.rgba();
+        }
+
+    }
+
+    public int[] recognizeSudoku(Bitmap input) {
+        mat = new Mat();
+        Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, mat);
 
         mat = turnImg(mat);
         mat = preprocMat(mat);
@@ -130,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
 
             if (Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
+                Toast.makeText(getApplicationContext(), "Got here!", Toast.LENGTH_LONG).show();
 //                aproxPolygon.convertTo(approxf1, CvType.CV_32S);
 //                List<MatOfPoint> contourTemp = new ArrayList<>();
 //                contourTemp.add(approxf1);
@@ -144,16 +182,63 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 for (int i : sudoku) {
                     System.out.print("Value: " + i);
                 }
-                if(wrapped.rows() != mat.cols() || wrapped.cols() != mat.rows()) {
-                    Imgproc.resize(wrapped, wrapped, new Size(mat.cols(), mat.rows()));
-                }
-                return wrapped;
+                return convertIntegers(sudoku);
             }
         }
-        return mat;
+        return null;
+    }
+
+    public static int[] convertIntegers(List<Integer> integers)
+    {
+        int[] ret = new int[integers.size()];
+        for (int i=0; i < ret.length; i++)
+        {
+            ret[i] = integers.get(i).intValue();
+        }
+        return ret;
+    }
+
+    @Override
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+
+        mat2 = inputFrame.rgba();
+
+//        mat = turnImg(mat);
+//        mat = preprocMat(mat);
+//
+//        MatOfPoint largest = largestPolygon(mat);
+//
+//        if(largest != null) {
+////            MatOfPoint approxf1 = new MatOfPoint();
+//            MatOfPoint2f aproxPolygon = aproxPolygon(largest);
+//
+//            if (Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
+////                aproxPolygon.convertTo(approxf1, CvType.CV_32S);
+////                List<MatOfPoint> contourTemp = new ArrayList<>();
+////                contourTemp.add(approxf1);
+////                Imgproc.drawContours(mat, contourTemp, 0, new Scalar(255, 255, 255), 20);
+//
+//                int size = distance(aproxPolygon);
+//
+//                Mat cutted = applyMask(mat, largest);
+//
+//                Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+//                List<Integer> sudoku = extractCells(wrapped);
+//                for (int i : sudoku) {
+//                    System.out.print("Value: " + i);
+//                }
+//                if(wrapped.rows() != mat.cols() || wrapped.cols() != mat.rows()) {
+//                    Imgproc.resize(wrapped, wrapped, new Size(mat.cols(), mat.rows()));
+//                }
+//                return wrapped;
+//            }
+//        }
+        return mat2;
     }
 
     private Mat turnImg(Mat original) {
+        matF = new Mat(mat.height(), mat.width(), CV_8UC4);
+        matT = new Mat(mat.width(), mat.width(), CV_8UC4);
 //        Matrix matrix = new Matrix();
 //        Mat rotated = new Mat(original.cols(), original.rows(), CV_8UC4);
 //        matrix.setRotate(270);
@@ -335,20 +420,17 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     // This function regocnizes a digit from an input cell using knearest neighbor and training
     // data.
     private Integer digitRecog(Mat cell) {
-        Mat warped = deskew(center(cell.clone()));
+//        Mat warped = deskew(center(cell.clone()));
         Mat result = new Mat();
-        Mat neighborhood = new Mat();
-        Mat distances = new Mat();
 
-        KNearest knn = loadTrainData();
-        knn.findNearest(singleRowConvert(cell), 3, result, neighborhood, distances);
+        loadTrainData();
+        knn.findNearest(singleRowConvert(cell), 3, result);
         System.out.println("Value!!!!!!!!!!!!!!!!!: " + result.get(0, 0)[0]);
         return (int)result.get(0, 0)[0];
     }
 
     // This function loads the training data and creates the k-nearest neighbour model.
-    private KNearest loadTrainData() {
-        KNearest knn;
+    private void loadTrainData() {
         Size digitSize = new Size(SZ, SZ);
         Mat trainData = new Mat();
         try {
@@ -388,8 +470,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         System.out.println("labels cols: " + labels.cols());
         System.out.println("labels rows: " + labels.rows());
         knn = KNearest.create();
+        knn.setAlgorithmType(KNearest.KDTREE);
         knn.train(samples, ROW_SAMPLE, labels);
-        return knn;
     }
 
     // This function converts a mat to a mat image with all data on a single row. This is for
@@ -453,16 +535,13 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     public void onCameraViewStarted(int width, int height) {
 
-        mat = new Mat(height, width, CV_8UC4);
-        matF = new Mat(height, width, CV_8UC4);
-        matT = new Mat(width, width, CV_8UC4);
+        mat2 = new Mat(height, width, CV_8UC4);
+        mat = new Mat();
     }
 
     @Override
     public void onCameraViewStopped() {
-        mat.release();
-        matF.release();
-        matT.release();
+        mat2.release();
     }
 
     @Override
