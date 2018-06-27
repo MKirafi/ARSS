@@ -45,6 +45,8 @@ import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity {
     private IntentManager intentManager;
 
@@ -60,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         int[][] grid2 = {
                 {0,0,7,0,6,0,1,0,9},
                 {0,9,0,2,7,0,3,0,0},
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(elapsedTime);
         print(sud2);
 
+        setContentView(R.layout.activity_main);
 
         Spinner language_spinner = (Spinner) findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.
@@ -166,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
                 sr.startListening(intentManager.getIntent());
             }
         });
+
+
+
+
     }
 
     public static void print(int[] grid) {
@@ -215,7 +220,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fillSudoku(Bitmap bitmap) {
-        int[] sud = recognizeSudoku(bitmap);
+        int[] sud = {8,0,0,0,0,0,0,0,0,
+                0,0,3,6,0,0,0,0,0,
+                0,7,0,0,9,0,2,0,0,
+                0,5,0,0,0,7,0,0,0,
+                0,0,0,0,4,5,7,0,0,
+                0,0,0,1,0,0,0,3,0,
+                0,0,1,0,0,0,0,6,8,
+                0,0,8,5,0,0,0,1,0,
+                0,9,0,0,0,0,4,0,0};
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
                 setCell(i / 9, i % 9, sud[i], true);
