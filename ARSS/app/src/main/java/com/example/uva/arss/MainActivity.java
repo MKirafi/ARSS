@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private String language = "nl_NL";
     private SpeechRecognizer sr;
     private int[] startSudoku;
+    private int[] currentSudoku;
 
 
     @Override
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 0,0,1,0,0,0,0,6,8,
                 0,0,8,5,0,0,0,1,0,
                 0,9,0,0,0,0,4,0,0};
-        this.startSudoku = sud;
 
         int[] sud2 = {0,0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,0,
@@ -97,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,0};
+
+        this.startSudoku = sud;
+        this.currentSudoku = sud2;
 
         BruteSudoku bruteSudoku = new BruteSudoku(grid);
 
