@@ -85,4 +85,11 @@ public class Sudoku {
         return true;
     }
 
+    public static boolean complete(int[] grid) {
+        for(int cell : grid) {
+            if(cell == 0) return false;
+        }
+        return true;
+    }
+
 }
