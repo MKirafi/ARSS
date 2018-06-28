@@ -106,6 +106,25 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0};
 
         this.startSudoku = sud;
+<<<<<<< ARSS/app/src/main/java/com/example/uva/arss/MainActivity.java
+=======
+        this.currentSudoku = sud2;
+
+        BruteSudoku bruteSudoku = new BruteSudoku(grid);
+
+        long startTime = System.nanoTime();;
+//        for(int i = 0; i < 25; i ++){
+//            System.out.println(i + "loooooooooooooooooooooop");
+//            Sudoku.solve(sud2.clone(), 0);
+//            System.out.println(System.nanoTime());
+//        }
+        long stopTime = System.nanoTime();
+        long elapsedTime = (stopTime - startTime);
+        System.out.println("=================================================");
+        System.out.println(elapsedTime);
+        System.out.println("=================================================");
+        //print(sud2);
+>>>>>>> ARSS/app/src/main/java/com/example/uva/arss/MainActivity.java
 
         setContentView(R.layout.activity_main);
 
@@ -230,15 +249,18 @@ public class MainActivity extends AppCompatActivity {
      * */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int[] sud;
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            fillSudoku(photo);
+            sud = recognizeSudoku(photo);
+            fillSudoku(sud);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
              Uri imageUri = data.getData();
              try {
                  Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                 sud = recognizeSudoku(photo);
                  fillSudoku(photo);
              }
              catch(java.io.IOException e) {
@@ -271,6 +293,11 @@ public class MainActivity extends AppCompatActivity {
                 String cellText = cell.getText().toString();
                 cellText = cellText.equals("") ? "0" : cellText;
                 sudoku[i*9 + j] = Integer.parseInt(cellText);
+
+    public void fillSudoku(int[] sud) {
+        for(int i = 0; i < sud.length; i++) {
+            if (sud[i] != 0) {
+                setCell(i / 9, i % 9, sud[i], true);
             }
         }
         return sudoku;
