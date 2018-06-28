@@ -216,15 +216,18 @@ public class MainActivity extends AppCompatActivity {
      * */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int[] sud;
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            fillSudoku(photo);
+            sud = recognizeSudoku(photo);
+            fillSudoku(sud);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
              Uri imageUri = data.getData();
              try {
                  Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                 sud = recognizeSudoku(photo);
                  fillSudoku(photo);
              }
              catch(java.io.IOException e) {
@@ -248,8 +251,7 @@ public class MainActivity extends AppCompatActivity {
             editText.setEnabled(false);
     }
 
-    public void fillSudoku(Bitmap bitmap) {
-        int[] sud = recognizeSudoku(bitmap);
+    public void fillSudoku(int[] sud) {
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
                 setCell(i / 9, i % 9, sud[i], true);
