@@ -32,6 +32,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.w3c.dom.*;
 import org.xmlpull.v1.XmlPullParser;
@@ -155,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         };
 
         while(!OpenCVLoader.initDebug()) {}
-        imgView = (ImageView) findViewById(R.id.imageView);
 
         Spinner language_spinner = (Spinner) findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             @Override
             public void onClick(View v) {
                 if(ocr != null){
-                    fillSudoku(ocr.recognizeText(), true);
+                    fillSudoku(ocr.startRecog(), true);
                 }
             }
         });
@@ -267,18 +267,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         });
     }
 
-
-
-
-
-
-        public static void print(int[] grid) {
-        for (int i = 0; i < 81; i += 9) {
-            System.out.println(Arrays.toString(Arrays.copyOfRange(grid, i, i + 9)));
-        }
-        System.out.println();
-    }
-
     private void checkPermission(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
@@ -302,23 +290,28 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            while(imgView == null){
-                imgView = (ImageView) findViewById(R.id.view);
-            }
-
-            ocr = new Ocr(photo);
-            Bitmap asd = ocr.recognizeSudoku();
-            imgView.setImageBitmap(asd);
-//            sud = recognizeSudoku(photo);
-            sud = this.startSudoku;
+            Mat mat = new Mat();
+            Bitmap bmp32 = photo.copy(Bitmap.Config.ARGB_8888, true);
+            Utils.bitmapToMat(bmp32, mat);
+            ocr = new Ocr();
+            ocr.setMat(mat);
+            ocr.findGrid();
+            sud = ocr.startRecog();
+//            sud = this.startSudoku;
             fillSudoku(sud, true);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
              Uri imageUri = data.getData();
              try {
                  Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                 //sud = recognizeSudoku(photo);
-                 sud = this.startSudoku;
+                 Mat mat = new Mat();
+                 Bitmap bmp32 = photo.copy(Bitmap.Config.ARGB_8888, true);
+                 Utils.bitmapToMat(bmp32, mat);
+                 ocr = new Ocr();
+                 ocr.setMat(mat);
+                 ocr.findGrid();
+                 sud = ocr.startRecog();
+//            sud = this.startSudoku;
                  fillSudoku(sud, true);
              }
              catch(java.io.IOException e) {
@@ -369,13 +362,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mat = inputFrame.rgba();
-        Ocr ocr = new Ocr(mat);
+        ocr.setMat(mat);
         mat = ocr.findGrid();
         return mat;
     }
 
     @Override
     public void onCameraViewStarted(int width, int height) {
+        ocr = new Ocr();
         mat2 = new Mat(height, width, CV_8UC4);
         mat = new Mat();
     }
