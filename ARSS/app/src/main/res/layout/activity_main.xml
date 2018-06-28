@@ -1320,47 +1320,41 @@
 
     </GridLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/load_image_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="6dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="1dp"
         android:layout_weight="1"
-        android:text="Load image"
+        android:src="@drawable/add_image"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/record_audio"
+        app:layout_constraintStart_toEndOf="@+id/take_image_button"
         app:layout_editor_absoluteX="270dp"
         app:layout_editor_absoluteY="447dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/take_image_button"
-        android:layout_width="70dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="149dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="1dp"
         android:layout_weight="1"
-        android:text="Take image"
+        android:src="@drawable/camera"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/load_image_button"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/record_audio"
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/record_audio"
-        android:layout_width="47dp"
-        android:layout_height="51dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="134dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
         android:layout_weight="1"
-        android:text="Record audio"
+        android:src="@drawable/mic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/load_image_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
@@ -1373,7 +1367,7 @@
         android:layout_marginBottom="34dp"
         app:layout_constraintBottom_toTopOf="@+id/record_audio"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view"
+        app:layout_constraintStart_toEndOf="@+id/myCameraView"
         app:layout_constraintTop_toBottomOf="@+id/GridLayout1" />
 
     <org.opencv.android.JavaCameraView
@@ -1389,37 +1383,41 @@
         app:show_fps="true"></org.opencv.android.JavaCameraView>
 
 
-    <Button
+    <ImageButton
         android:id="@+id/check_sudoku"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_weight="1"
-        android:text="check"
-        app:layout_constraintBottom_toTopOf="@+id/record_audio"
-        app:layout_editor_absoluteX="149dp"
-        app:layout_editor_absoluteY="447dp"
-        tools:layout_editor_absoluteX="211dp" />
-
-    <Button
-        android:id="@+id/solve_sudoku"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_weight="1"
-        android:text="solve"
-        app:layout_constraintBottom_toTopOf="@+id/take_image_button"
-        app:layout_constraintStart_toEndOf="@+id/check_sudoku"
+        android:src="@drawable/check"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
 
-    <Button
+    <ImageButton
+        android:id="@+id/solve_sudoku"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="1dp"
+        android:layout_weight="1"
+        android:src="@drawable/solve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/check_sudoku"
+        app:layout_editor_absoluteX="149dp"
+        app:layout_editor_absoluteY="447dp" />
+
+    <ImageButton
         android:id="@+id/scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scan"
-        tools:layout_editor_absoluteX="24dp"
-        tools:layout_editor_absoluteY="382dp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="1dp"
+        android:src="@drawable/scan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/solve_sudoku" />
 
 
 </android.support.constraint.ConstraintLayout>
