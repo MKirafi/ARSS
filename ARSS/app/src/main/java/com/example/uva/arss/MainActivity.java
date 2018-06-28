@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
+    Mat mat, mat2;
     CameraBridgeViewBase camera;
     BaseLoaderCallback baseLoaderCallback;
 
@@ -336,11 +337,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-
+        mat = inputFrame.rgba();
+        OCR ocr = new OCR(mat);
+        mat = ocr.findGrid();
+        return mat;
     }
-
 
     @Override
     public void onCameraViewStarted(int width, int height) {
@@ -348,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
         mat2 = new Mat(height, width, CV_8UC4);
         mat = new Mat();
     }
-
     @Override
     public void onCameraViewStopped() {
         mat2.release();
