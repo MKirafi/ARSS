@@ -27,7 +27,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 import org.w3c.dom.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -57,11 +60,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static java.lang.Thread.sleep;
+import static org.opencv.core.CvType.CV_8UC4;
 
 public class MainActivity extends AppCompatActivity {
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
+    Mat mat, mat2;
+    CameraBridgeViewBase camera;
+    BaseLoaderCallback baseLoaderCallback;
 
     private String language = "nl_NL";
     private SpeechRecognizer sr;
@@ -73,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Enables the cameraview.
+        baseLoaderCallback = new BaseLoaderCallback(this) {
+            @Override
+            public void onManagerConnected(int status) {
+                switch (status) {
+                    case BaseLoaderCallback.SUCCESS:
+                        camera.enableView();
+                        break;
+                    default:
+                        super.onManagerConnected(status);
+                        break;
+                }
+            }
+        };
+
         while(!OpenCVLoader.initDebug()) {}
         imgView = (ImageView) findViewById(R.id.imageView);
         int[][] grid2 = {
@@ -120,24 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0};
 
         this.startSudoku = sud;
-<<<<<<< HEAD
-=======
-
-        BruteSudoku bruteSudoku = new BruteSudoku(grid);
-
-        long startTime = System.nanoTime();;
-//        for(int i = 0; i < 25; i ++){
-//            System.out.println(i + "loooooooooooooooooooooop");
-//            Sudoku.solve(sud2.clone(), 0);
-//            System.out.println(System.nanoTime());
-//        }
-        long stopTime = System.nanoTime();
-        long elapsedTime = (stopTime - startTime);
-        System.out.println("=================================================");
-        System.out.println(elapsedTime);
-        System.out.println("=================================================");
-        //print(sud2);
->>>>>>> 473e1eecfe229f57051aadd58494e974afee76a0
 
         setContentView(R.layout.activity_main);
 
@@ -243,7 +247,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public static void print(int[] grid) {
+
+
+
+        public static void print(int[] grid) {
         for (int i = 0; i < 81; i += 9) {
             System.out.println(Arrays.toString(Arrays.copyOfRange(grid, i, i + 9)));
         }
@@ -329,6 +336,53 @@ public class MainActivity extends AppCompatActivity {
             setCell(i / 9, i % 9, sud[i], permanent);
         }
     }
+
+
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        mat = inputFrame.rgba();
+        OCR ocr = new OCR(mat);
+        mat = ocr.findGrid();
+        return mat;
+    }
+
+    @Override
+    public void onCameraViewStarted(int width, int height) {
+
+        mat2 = new Mat(height, width, CV_8UC4);
+        mat = new Mat();
+    }
+    @Override
+    public void onCameraViewStopped() {
+        mat2.release();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(camera != null) {
+            camera.disableView();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!OpenCVLoader.initDebug()) {
+            Toast.makeText(getApplicationContext(), "Opencv problem", Toast.LENGTH_LONG).show();
+        }
+        else {
+            baseLoaderCallback.onManagerConnected(BaseLoaderCallback.SUCCESS);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(camera != null) {
+            camera.disableView();
+        }
+    }
+
 
     // Class used to receive text after listening.
     class speechListener implements RecognitionListener {
