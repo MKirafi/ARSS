@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
         });
 
-        Button scan = findViewById(R.id.scan);
+        View scan = findViewById(R.id.scan);
 
         // The button for loading an image containing a sudoku.
         View loadImage = findViewById(R.id.load_image_button);
