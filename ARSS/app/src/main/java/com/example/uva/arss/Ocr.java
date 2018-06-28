@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
@@ -34,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static org.opencv.core.CvType.CV_8UC4;
 import static org.opencv.imgproc.Imgproc.CHAIN_APPROX_SIMPLE;
 import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
 import static org.opencv.imgproc.Imgproc.approxPolyDP;
@@ -44,7 +46,7 @@ import static org.opencv.imgproc.Imgproc.warpPerspective;
 public class Ocr {
     int height, width;
     Bitmap input, sudoku;
-    Mat mat, hierarchy;
+    Mat mat, hierarchy, matF, matT;
     Size FOUR_CORNERS = new Size(1, 4);
 
     public Ocr(Bitmap bitmap) {
@@ -53,50 +55,104 @@ public class Ocr {
         input = bitmap;
     }
 
-    public int[] recognizeSudoku() {
-        mat = new Mat(input.getHeight(), input.getWidth(), CvType.CV_8UC4);
-        Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, mat);
+    public Ocr(Mat mat) {
+        height = mat.height();
+        width = mat.width();
+        this.mat = mat;
+    }
 
+    public Mat findGrid() {
+        mat = turnImg(mat);
         mat = preProcessMat(mat);
         MatOfPoint largest = largestPolygon(mat);
 
         if(largest != null) {
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
             if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
                 int size = distance(aproxPolygon);
                 Mat cutted = applyMask(mat, largest);
                 Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
-                sudoku = Bitmap.createBitmap(wrapped.height(), wrapped.width(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(wrapped, sudoku);
-                recognizeText();
-            }
-            else {
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
+                return wrapped;
+//                List<Mat> cells = getBoxes(wrapped);
+//                for (Mat cell : cells) {
+//                    sudoku = Bitmap.createBitmap(wrapped.height(), wrapped.width(), Bitmap.Config.ARGB_8888);
+//                    Utils.matToBitmap(wrapped, sudoku);
+//                    recognizeText();
+//                }
             }
         }
-        return new int[81];
+        return mat;
+    }
+
+    public Bitmap recognizeSudoku() {
+//        sudoku = input;
+//        recognizeText();
+        mat = new Mat(input.getHeight(), input.getWidth(), CV_8UC4);
+        Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, mat);
+
+        mat = turnImg(mat);
+        mat = preProcessMat(mat);
+        MatOfPoint largest = largestPolygon(mat);
+
+        if(largest != null) {
+            MatOfPoint2f aproxPolygon = aproxPolygon(largest);
+            if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
+                int size = distance(aproxPolygon);
+                Mat cutted = mat;
+               // Mat cutted = applyMask(mat, largest);
+                Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+                if (wrapped == mat){
+                    System.out.println("wrapped werkt nieeeeeeeeeeeeeeeeeeeeeet");
+                }else{
+                    System.out.println("wrapped werkt weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeel");
+                    System.out.println("Mat: " + mat.height() + " , " + mat.width());
+                    System.out.println("Wrapped :" + wrapped.height() + " , " + wrapped.width());
+                }
+//                Core.bitwise_not(wrapped, wrapped);
+//                Core.bitwise_not(wrapped, wrapped);
+                sudoku = Bitmap.createBitmap(wrapped.height(), wrapped.width(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(wrapped, sudoku);
+//                List<Mat> cells = getBoxes(wrapped);
+//                for (Mat cell : cells) {
+//                    sudoku = Bitmap.createBitmap(cell.height(), cell.width(), Bitmap.Config.ARGB_8888);
+//                    Utils.matToBitmap(cell, sudoku);
+                    recognizeText();
+//                }
+                return sudoku;
+
+            }
+//            else {
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//            }
+        }
+        return null;
+//        return new int[81];
     }
 
     private Mat preProcessMat(Mat preprocMat) {
-        Mat processed = new Mat(preprocMat.size(), CvType.CV_8UC4);
+        Mat processed = new Mat(preprocMat.size(), CV_8UC4);
         Imgproc.cvtColor(preprocMat, processed, Imgproc.COLOR_RGBA2GRAY);
         Imgproc.GaussianBlur(processed, processed, new Size(11, 11), 0);
         Imgproc.adaptiveThreshold(processed, processed, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 5, 2);
         Core.bitwise_not(processed, processed);
         return processed;
     }
+
+    private Mat turnImg(Mat original) {
+        matF = new Mat(mat.height(), mat.width(), CV_8UC4);
+        matT = new Mat(mat.width(), mat.width(), CV_8UC4);
+        Core.transpose(original, matT);
+        Imgproc.resize(matT, matF, matF.size(), 0, 0, 0);
+        Core.flip(matF, original, 1);
+        return original;
+    }
+
 
     private MatOfPoint largestPolygon(Mat mat) {
         double area, largestArea = 0;
@@ -149,7 +205,7 @@ public class Ocr {
     private Mat wrapPerspective(int size, MatOfPoint2f src, Mat image) {
         Size reshape = new Size(size, size);
 
-        Mat undistorted = new Mat(reshape, CvType.CV_8UC4);
+        Mat undistorted = new Mat(reshape, CV_8UC4);
 
         MatOfPoint2f d = new MatOfPoint2f();
         d.fromArray(new org.opencv.core.Point(0, 0), new org.opencv.core.Point(0, reshape.width), new org.opencv.core.Point(reshape.height, 0),
@@ -181,7 +237,22 @@ public class Ocr {
             }
     );
 
+    private List<Mat> getBoxes(Mat grid) {
+        int size = grid.rows()/9;
+        List<Mat> digitCells = Lists.newArrayList();
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                org.opencv.core.Rect rect = new org.opencv.core.Rect(new org.opencv.core.Point(col * size, row * size), new Size(size, size));
+                Mat digit = new Mat(grid, rect).clone();
+                digitCells.add(digit);
+            }
+        }
+        return digitCells;
+    }
+
+
     private void recognizeText() {
+        System.out.println("rows: " + sudoku.getHeight() + " cols: " + sudoku.getWidth());
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(sudoku);
         FirebaseVisionTextDetector detector = FirebaseVision.getInstance().getVisionTextDetector();
         Task<FirebaseVisionText> result =
@@ -189,6 +260,8 @@ public class Ocr {
                 .detectInImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                 @Override
                 public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                    System.out.println("FOUND SOMETHING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    //println(firebaseVisionText.getBlocks().size());
                     for (FirebaseVisionText.Block block: firebaseVisionText.getBlocks()) {
                         Rect boundingBox = block.getBoundingBox();
                         Point[] cornerPoints = block.getCornerPoints();
@@ -199,7 +272,7 @@ public class Ocr {
                             // ...
                             for (FirebaseVisionText.Element element: line.getElements()) {
                                 // ...
-                                System.out.println("Element: " + element.getText() + " bounding box " + element.getBoundingBox());
+                                //System.out.println("Element: " + element.getText() + " bounding box " + element.getBoundingBox());
                             }
                         }
                     }

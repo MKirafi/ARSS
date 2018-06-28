@@ -315,6 +315,20 @@ public class MainActivity extends AppCompatActivity {
             editText.setEnabled(false);
     }
 
+
+    public void fillSudoku(Bitmap bitmap) {
+        while(imgView == null){
+            imgView = (ImageView) findViewById(R.id.view);
+        }
+
+        Ocr ocr = new Ocr(bitmap);
+        Bitmap asd = ocr.recognizeSudoku();
+        imgView.setImageBitmap(asd);
+        int[] sud = new int[81];
+        for(int i = 0; i < sud.length; i++) {
+            if (sud[i] != 0) {
+                setCell(i / 9, i % 9, sud[i], true);
+                
     // This function fills the sudoku after getting the sudoku picture.
     public int[] getSudoku() {
         int[] sudoku = new int[81];
