@@ -185,8 +185,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int[] sudoku = getSudoku();
-                boolean valid = Sudoku.solveSudoku(sudoku, 0) != null;
                 boolean complete = Sudoku.complete(sudoku);
+                boolean valid = Sudoku.solveSudoku(sudoku, 0) != null;
 
                 Toast.makeText(getApplicationContext(),
                         "Sudoku is\n" + "valid: " + valid + "\n" + "complete: " + complete,
@@ -259,14 +259,16 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            sud = recognizeSudoku(photo);
+//            sud = recognizeSudoku(photo);
+            sud = this.startSudoku;
             fillSudoku(sud, true);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
              Uri imageUri = data.getData();
              try {
                  Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                 sud = recognizeSudoku(photo);
+                 //sud = recognizeSudoku(photo);
+                 sud = this.startSudoku;
                  fillSudoku(sud, true);
              }
              catch(java.io.IOException e) {
@@ -309,9 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void fillSudoku(int[] sud, boolean permanent) {
         for (int i = 0; i < sud.length; i++) {
-            if (sud[i] != 0) {
-                setCell(i / 9, i % 9, sud[i], permanent);
-            }
+            setCell(i / 9, i % 9, sud[i], permanent);
         }
     }
 
