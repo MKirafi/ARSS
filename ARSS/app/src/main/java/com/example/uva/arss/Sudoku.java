@@ -21,7 +21,6 @@ public class Sudoku {
     // false.
     public static boolean solve(int[] grid, int cell){
         while (cell < 81 && grid[cell] > 0){
-            //System.out.println("Cell: " + cell + " ========================");
             cell++;
         }
 

@@ -5,12 +5,14 @@ public class BruteSudoku {
     private int[][] grid;
     private int width, height;
 
+    //Constructor function
     public BruteSudoku(int[][] grid){
         this.grid = grid;
         this.width = grid[0].length;
         this.height = grid.length;
     }
 
+    //Function that is called by mainActivity
     public int[][] solveSudoku(int [][] grid){
         if (solve(grid)){
             return this.grid;
@@ -18,6 +20,7 @@ public class BruteSudoku {
         return null;
     }
 
+    //Calles all the other functions to solve te Sudoku
     private boolean solve(int[][] grid){
         for(int row = 0; row < height; row++){
             for(int column = 0; column < width; column++){
@@ -36,10 +39,12 @@ public class BruteSudoku {
         return true;
     }
 
+    //Checks if the newly imputed value is valid in that spot
     private boolean valid(int[][] grid, int row, int column){
         return (rowcheck(grid, row) && columncheck(grid, column) && blockcheck(grid, row, column));
     }
 
+    //Checks if the given row is valid
     private boolean rowcheck(int[][] grid, int row){
         int[] values = new int[9];
         for (int i = 0; i < grid[row].length; i++){
@@ -54,6 +59,7 @@ public class BruteSudoku {
         return true;
     }
 
+    //Checks if the given column is valid
     private boolean columncheck(int[][] grid, int column){
         int[] values = new int[9];
         for (int i = 0; i < grid.length; i++){
@@ -67,6 +73,7 @@ public class BruteSudoku {
         return true;
     }
 
+    //Checks if the fiven Block of 3x3 is valid
     private boolean blockcheck(int[][] grid, int row, int column){
         int [] rows = new int[3];
         int [] columns = new  int[3];
