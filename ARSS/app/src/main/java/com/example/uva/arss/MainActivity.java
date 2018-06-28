@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
 
         // The button for taking the image containing a sudoku.
-        Button takeImage = findViewById(R.id.take_image_button);
+        View takeImage = findViewById(R.id.take_image_button);
         takeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             // This method opens the camera app.
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         });
 
         // The button for loading an image containing a sudoku.
-        Button loadImage = findViewById(R.id.load_image_button);
+        View loadImage = findViewById(R.id.load_image_button);
         loadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             // This method opens the gallery app.
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             while(imgView == null){
-                imgView = (ImageView) findViewById(R.id.view);
+                imgView = (ImageView) findViewById(R.id.myCameraView);
             }
 
             ocr = new Ocr(photo);
