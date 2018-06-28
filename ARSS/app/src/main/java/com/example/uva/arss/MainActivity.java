@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         };
 
         while(!OpenCVLoader.initDebug()) {}
-        imgView = (ImageView) findViewById(R.id.imageView);
+        imgView = (ImageView) findViewById(R.id.myCameraView);
 
         Spinner language_spinner = (Spinner) findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
         });
 
-        Button scan = findViewById(R.id.scan);
+        View scan = findViewById(R.id.scan);
         scan.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
