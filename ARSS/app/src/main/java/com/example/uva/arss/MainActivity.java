@@ -1,3 +1,8 @@
+/* Names: Mund Vetter, Abdelilah Ahbari, Mounir el Kirafi, Liam Zuiderhoek
+ * StudentID: 11902388, 12021954, 11879106, 11154136
+ * In this mainactivity a picture of the sudoku can be made, the sudoku can be solved,
+ * the sudoku can be filled in manually and through voice commands.
+ */
 package com.example.uva.arss;
 
 import android.Manifest;
@@ -22,7 +27,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
 import org.w3c.dom.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -52,16 +60,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static java.lang.Thread.sleep;
+import static org.opencv.core.CvType.CV_8UC4;
 
 public class MainActivity extends AppCompatActivity {
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
-    
+    Mat mat, mat2;
+    CameraBridgeViewBase camera;
+    BaseLoaderCallback baseLoaderCallback;
+
     private String language = "nl_NL";
     private SpeechRecognizer sr;
     private int[] startSudoku;
-    private int[] currentSudoku;
 
     private ImageView imgView;
     private Bitmap sudoku;
@@ -69,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Enables the cameraview.
+        baseLoaderCallback = new BaseLoaderCallback(this) {
+            @Override
+            public void onManagerConnected(int status) {
+                switch (status) {
+                    case BaseLoaderCallback.SUCCESS:
+                        camera.enableView();
+                        break;
+                    default:
+                        super.onManagerConnected(status);
+                        break;
+                }
+            }
+        };
+
         while(!OpenCVLoader.initDebug()) {}
         imgView = (ImageView) findViewById(R.id.imageView);
         int[][] grid2 = {
@@ -116,23 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0};
 
         this.startSudoku = sud;
-        this.currentSudoku = sud2;
-
-        BruteSudoku bruteSudoku = new BruteSudoku(grid);
-
-        long startTime = System.nanoTime();;
-//        for(int i = 0; i < 25; i ++){
-//            System.out.println(i + "loooooooooooooooooooooop");
-//            Sudoku.solve(sud2.clone(), 0);
-//            System.out.println(System.nanoTime());
-//        }
-
-        long stopTime = System.nanoTime();
-        long elapsedTime = (stopTime - startTime);
-        System.out.println("=================================================");
-        System.out.println(elapsedTime);
-        System.out.println("=================================================");
-        //print(sud2);
 
         setContentView(R.layout.activity_main);
 
@@ -144,18 +153,22 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermission();
 
+        // The button for taking the image containing a sudoku.
         Button takeImage = findViewById(R.id.take_image_button);
         takeImage.setOnClickListener(new View.OnClickListener() {
             @Override
+            // This method opens the camera app.
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
 
+        // The button for loading an image containing a sudoku.
         Button loadImage = findViewById(R.id.load_image_button);
         loadImage.setOnClickListener(new View.OnClickListener() {
             @Override
+            // This method opens the gallery app.
             public void onClick(View v) {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
@@ -178,8 +191,39 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         instruction,
                         Toast.LENGTH_LONG).show();
-                //System.out.println(intentManager.getIntent().toString() + " intent");
                 sr.startListening(new IntentManager(language).getIntent());
+            }
+        });
+
+        /* "check sudoku" button: */
+        View checkSudoku = findViewById(R.id.check_sudoku);
+        checkSudoku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] sudoku = getSudoku();
+                boolean complete = Sudoku.complete(sudoku);
+                boolean valid = Sudoku.solveSudoku(sudoku, 0) != null;
+
+                Toast.makeText(getApplicationContext(),
+                        "Sudoku is\n" + "valid: " + valid + "\n" + "complete: " + complete,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+        /* "solve sudoku" button: */
+        View solveSudoku = findViewById(R.id.solve_sudoku);
+        solveSudoku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] sudoku = getSudoku();
+                int[] solved = Sudoku.solveSudoku(sudoku, 0);
+                if(solved == null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Sudoku is unsolvable.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    fillSudoku(solved, false);
+                }
             }
         });
 
@@ -203,7 +247,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public static void print(int[] grid) {
+
+
+
+        public static void print(int[] grid) {
         for (int i = 0; i < 81; i += 9) {
             System.out.println(Arrays.toString(Arrays.copyOfRange(grid, i, i + 9)));
         }
@@ -227,17 +274,23 @@ public class MainActivity extends AppCompatActivity {
      * Callback for speech recognition activity
      * */
     @Override
+    // This function is for returning the picture from load image and take image.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int[] sud;
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            fillSudoku(photo);
+//            sud = recognizeSudoku(photo);
+            sud = this.startSudoku;
+            fillSudoku(sud, true);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
              Uri imageUri = data.getData();
              try {
                  Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                 fillSudoku(photo);
+                 //sud = recognizeSudoku(photo);
+                 sud = this.startSudoku;
+                 fillSudoku(sud, true);
              }
              catch(java.io.IOException e) {
                  System.out.println("Something went wrong.");
@@ -247,18 +300,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Returns whether a cell is editable.
     public boolean isEditable(int x, int y) {
-        return startSudoku[y*9 + x] == 0;
+        return this.startSudoku[y*9 + x] == 0;
     }
 
+    // This function sets a sudoku cell, with the option of making the cell permanent.
     public void setCell(int x, int y, int value, boolean permanent) {
         String cell = "row" + x + "column" + y;
-        String stringValue = "" + value;
+        String stringValue = value == 0 ? "" : "" + value;
         EditText editText = (EditText) findViewById(getResources().getIdentifier(cell, "id", getPackageName()));
         editText.setText(stringValue);
-        if (permanent)
+        if (permanent && value != 0)
             editText.setEnabled(false);
     }
+
 
     public void fillSudoku(Bitmap bitmap) {
         while(imgView == null){
@@ -272,9 +328,77 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
                 setCell(i / 9, i % 9, sud[i], true);
+                
+    // This function fills the sudoku after getting the sudoku picture.
+    public int[] getSudoku() {
+        int[] sudoku = new int[81];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                String selector = "row" + i + "column" + j;
+                EditText cell = (EditText) findViewById(getResources().getIdentifier(selector, "id", getPackageName()));
+                String cellText = cell.getText().toString();
+                cellText = cellText.equals("") ? "0" : cellText;
+                sudoku[i * 9 + j] = Integer.parseInt(cellText);
             }
+
+        }
+        return sudoku;
+    }
+
+    public void fillSudoku(int[] sud, boolean permanent) {
+        for (int i = 0; i < sud.length; i++) {
+            setCell(i / 9, i % 9, sud[i], permanent);
         }
     }
+
+
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        mat = inputFrame.rgba();
+        OCR ocr = new OCR(mat);
+        mat = ocr.findGrid();
+        return mat;
+    }
+
+    @Override
+    public void onCameraViewStarted(int width, int height) {
+
+        mat2 = new Mat(height, width, CV_8UC4);
+        mat = new Mat();
+    }
+    @Override
+    public void onCameraViewStopped() {
+        mat2.release();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(camera != null) {
+            camera.disableView();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!OpenCVLoader.initDebug()) {
+            Toast.makeText(getApplicationContext(), "Opencv problem", Toast.LENGTH_LONG).show();
+        }
+        else {
+            baseLoaderCallback.onManagerConnected(BaseLoaderCallback.SUCCESS);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(camera != null) {
+            camera.disableView();
+        }
+    }
+
+
+    // Class used to receive text after listening.
     class speechListener implements RecognitionListener {
 
         public void onReadyForSpeech(Bundle params) {
@@ -293,9 +417,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onError(int error) {
-            System.out.println(error + " error!!");
+
         }
 
+        // Parses result and fills new value at coordinate if possible.
         public void onResults(Bundle results) {
             String res = results.getStringArrayList(sr.RESULTS_RECOGNITION).get(0);
             VoiceCommand command = new VoiceCommand(res, language);
@@ -309,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                 int y = m.getY();
                 int value = m.getValue();
 
-                if(isEditable(x, y)) {
+                if (isEditable(x, y)) {
                     setCell(y, x, value, false);
                 } else {
                     Toast.makeText(getApplicationContext(),
