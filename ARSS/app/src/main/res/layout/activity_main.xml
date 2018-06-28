@@ -1336,8 +1336,8 @@
 
     <Button
         android:id="@+id/take_image_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="56dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="15dp"
         android:layout_marginStart="149dp"
@@ -1345,14 +1345,15 @@
         android:text="Take image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/load_image_button"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
 
     <ImageButton
         android:id="@+id/record_audio"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="47dp"
+        android:layout_height="51dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="134dp"
         android:layout_marginStart="16dp"
@@ -1377,8 +1378,8 @@
 
     <org.opencv.android.JavaCameraView
         android:id="@+id/myCameraView"
-        android:layout_width="211dp"
-        android:layout_height="112dp"
+        android:layout_width="361dp"
+        android:layout_height="213dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -1412,6 +1413,13 @@
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
 
+    <Button
+        android:id="@+id/scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="382dp" />
 
 
 </android.support.constraint.ConstraintLayout>

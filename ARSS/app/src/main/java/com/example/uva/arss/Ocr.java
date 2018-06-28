@@ -46,7 +46,7 @@ import static org.opencv.imgproc.Imgproc.warpPerspective;
 public class Ocr {
     int height, width;
     Bitmap input, sudoku;
-    Mat mat, hierarchy, matF, matT;
+    Mat mat, hierarchy, matF, matT, wrapped, original;
     Size FOUR_CORNERS = new Size(1, 4);
 
     public Ocr(Bitmap bitmap) {
@@ -59,6 +59,7 @@ public class Ocr {
         height = mat.height();
         width = mat.width();
         this.mat = mat;
+        this.original = mat;
     }
 
     public Mat findGrid() {
@@ -70,8 +71,14 @@ public class Ocr {
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
             if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
                 int size = distance(aproxPolygon);
-                Mat cutted = applyMask(mat, largest);
-                Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+                Mat cutted = applyMask(original, largest);
+                wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+                Imgproc.resize(wrapped, wrapped, new Size(original.cols(), original.rows()));
+                sudoku = Bitmap.createBitmap(wrapped.width(), wrapped.height(), Bitmap.Config.ARGB_8888);
+                System.out.println(sudoku.getHeight() + " " + sudoku.getWidth());
+                System.out.println(wrapped.height() + " " + wrapped.width());
+                Utils.matToBitmap(wrapped, sudoku);
+                recognizeText();
                 return wrapped;
 //                List<Mat> cells = getBoxes(wrapped);
 //                for (Mat cell : cells) {
@@ -252,7 +259,7 @@ public class Ocr {
 
 
     private void recognizeText() {
-        System.out.println("rows: " + sudoku.getHeight() + " cols: " + sudoku.getWidth());
+//        System.out.println("rows: " + sudoku.getHeight() + " cols: " + sudoku.getWidth());
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(sudoku);
         FirebaseVisionTextDetector detector = FirebaseVision.getInstance().getVisionTextDetector();
         Task<FirebaseVisionText> result =
