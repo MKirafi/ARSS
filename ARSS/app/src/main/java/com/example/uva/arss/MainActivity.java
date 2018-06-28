@@ -2,6 +2,7 @@ package com.example.uva.arss;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,11 +16,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import org.opencv.android.OpenCVLoader;
 import org.w3c.dom.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -36,6 +39,8 @@ import android.view.View;
 
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,15 +57,19 @@ public class MainActivity extends AppCompatActivity {
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
-    
+
     private String language = "nl_NL";
     private SpeechRecognizer sr;
     private int[] startSudoku;
 
+    private ImageView imgView;
+    private Bitmap sudoku;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        while(!OpenCVLoader.initDebug()) {}
+        imgView = (ImageView) findViewById(R.id.imageView);
         int[][] grid2 = {
                 {0,0,7,0,6,0,1,0,9},
                 {0,9,0,2,7,0,3,0,0},
@@ -106,25 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0};
 
         this.startSudoku = sud;
-<<<<<<< ARSS/app/src/main/java/com/example/uva/arss/MainActivity.java
-=======
-        this.currentSudoku = sud2;
-
-        BruteSudoku bruteSudoku = new BruteSudoku(grid);
-
-        long startTime = System.nanoTime();;
-//        for(int i = 0; i < 25; i ++){
-//            System.out.println(i + "loooooooooooooooooooooop");
-//            Sudoku.solve(sud2.clone(), 0);
-//            System.out.println(System.nanoTime());
-//        }
-        long stopTime = System.nanoTime();
-        long elapsedTime = (stopTime - startTime);
-        System.out.println("=================================================");
-        System.out.println(elapsedTime);
-        System.out.println("=================================================");
-        //print(sud2);
->>>>>>> ARSS/app/src/main/java/com/example/uva/arss/MainActivity.java
 
         setContentView(R.layout.activity_main);
 
@@ -223,6 +213,8 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
+
+
 
     public static void print(int[] grid) {
         for (int i = 0; i < 81; i += 9) {
