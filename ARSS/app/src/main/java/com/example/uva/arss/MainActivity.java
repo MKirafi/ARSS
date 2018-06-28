@@ -83,27 +83,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        camera = (JavaCameraView) findViewById(R.id.myCameraView);
-        camera.setVisibility(SurfaceView.VISIBLE);
-        camera.setCvCameraViewListener(this);
 
-        // Enables the cameraview.
-        baseLoaderCallback = new BaseLoaderCallback(this) {
-            @Override
-            public void onManagerConnected(int status) {
-                switch (status) {
-                    case BaseLoaderCallback.SUCCESS:
-                        camera.enableView();
-                        break;
-                    default:
-                        super.onManagerConnected(status);
-                        break;
-                }
-            }
-        };
-
-        while(!OpenCVLoader.initDebug()) {}
-        imgView = (ImageView) findViewById(R.id.imageView);
         int[][] grid2 = {
                 {0,0,7,0,6,0,1,0,9},
                 {0,9,0,2,7,0,3,0,0},
@@ -152,6 +132,30 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         setContentView(R.layout.activity_main);
 
+        while(camera == null) {
+            camera = (JavaCameraView) findViewById(R.id.myCameraView);
+        }
+        camera.setVisibility(SurfaceView.VISIBLE);
+        camera.setCvCameraViewListener(this);
+
+        // Enables the cameraview.
+        baseLoaderCallback = new BaseLoaderCallback(this) {
+            @Override
+            public void onManagerConnected(int status) {
+                switch (status) {
+                    case BaseLoaderCallback.SUCCESS:
+                        camera.enableView();
+                        break;
+                    default:
+                        super.onManagerConnected(status);
+                        break;
+                }
+            }
+        };
+
+        while(!OpenCVLoader.initDebug()) {}
+        imgView = (ImageView) findViewById(R.id.imageView);
+
         Spinner language_spinner = (Spinner) findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.
                     createFromResource(this, R.array.language_array, android.R.layout.simple_spinner_item);
@@ -170,6 +174,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
+
+        Button scan = findViewById(R.id.scan);
 
         // The button for loading an image containing a sudoku.
         Button loadImage = findViewById(R.id.load_image_button);
