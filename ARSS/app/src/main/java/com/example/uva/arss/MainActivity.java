@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     Mat mat, mat2;
     CameraBridgeViewBase camera;
     BaseLoaderCallback baseLoaderCallback;
+    private Ocr ocr;
 
     private String language = "nl_NL";
     private SpeechRecognizer sr;
@@ -176,6 +177,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         });
 
         Button scan = findViewById(R.id.scan);
+        scan.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(ocr != null){
+                    fillSudoku(ocr.recognizeText(), true);
+                }
+            }
+        });
 
         // The button for loading an image containing a sudoku.
         Button loadImage = findViewById(R.id.load_image_button);
@@ -297,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 imgView = (ImageView) findViewById(R.id.view);
             }
 
-            Ocr ocr = new Ocr(photo);
+            ocr = new Ocr(photo);
             Bitmap asd = ocr.recognizeSudoku();
             imgView.setImageBitmap(asd);
 //            sud = recognizeSudoku(photo);
