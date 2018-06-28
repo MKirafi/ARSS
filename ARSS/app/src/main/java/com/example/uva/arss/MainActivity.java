@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         });
 
         //Button for scanning the image of sudoku
-        Button scan = findViewById(R.id.scan);
+        View scan = findViewById(R.id.scan);
         scan.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
