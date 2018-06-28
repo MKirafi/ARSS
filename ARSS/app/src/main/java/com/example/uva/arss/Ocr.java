@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
@@ -53,7 +54,9 @@ public class Ocr {
         input = bitmap;
     }
 
-    public int[] recognizeSudoku() {
+    public Bitmap recognizeSudoku() {
+//        sudoku = input;
+//        recognizeText();
         mat = new Mat(input.getHeight(), input.getWidth(), CvType.CV_8UC4);
         Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
         Utils.bitmapToMat(bmp32, mat);
@@ -64,29 +67,33 @@ public class Ocr {
         if(largest != null) {
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
             if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
-                System.out.println("SUCCES!!!");
                 int size = distance(aproxPolygon);
                 Mat cutted = applyMask(mat, largest);
                 Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
+                Core.bitwise_not(wrapped, wrapped);
+//                Core.bitwise_not(wrapped, wrapped);
                 sudoku = Bitmap.createBitmap(wrapped.height(), wrapped.width(), Bitmap.Config.ARGB_8888);
                 Utils.matToBitmap(wrapped, sudoku);
-                recognizeText();
+                List<Mat> cells = getBoxes(wrapped);
+                for (Mat cell : cells) {
+                    sudoku = Bitmap.createBitmap(cell.height(), cell.width(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(cell, sudoku);
+                    recognizeText();
+                }
+                return sudoku;
+
             }
-            else {
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-                System.out.println("FAIL!!!");
-            }
+//            else {
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//                System.out.println("FAIL!!!");
+//            }
         }
-        return new int[81];
+        return null;
+//        return new int[81];
     }
 
     private Mat preProcessMat(Mat preprocMat) {
@@ -181,7 +188,22 @@ public class Ocr {
             }
     );
 
+    private List<Mat> getBoxes(Mat grid) {
+        int size = grid.rows()/9;
+        List<Mat> digitCells = Lists.newArrayList();
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                org.opencv.core.Rect rect = new org.opencv.core.Rect(new org.opencv.core.Point(col * size, row * size), new Size(size, size));
+                Mat digit = new Mat(grid, rect).clone();
+                digitCells.add(digit);
+            }
+        }
+        return digitCells;
+    }
+
+
     private void recognizeText() {
+        System.out.println("rows: " + sudoku.getHeight() + " cols: " + sudoku.getWidth());
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(sudoku);
         FirebaseVisionTextDetector detector = FirebaseVision.getInstance().getVisionTextDetector();
         Task<FirebaseVisionText> result =
@@ -189,6 +211,8 @@ public class Ocr {
                 .detectInImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                 @Override
                 public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                    System.out.println("FOUND SOMETHING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    System.out.println(firebaseVisionText.getBlocks().size());
                     for (FirebaseVisionText.Block block: firebaseVisionText.getBlocks()) {
                         Rect boundingBox = block.getBoundingBox();
                         Point[] cornerPoints = block.getCornerPoints();
@@ -199,7 +223,7 @@ public class Ocr {
                             // ...
                             for (FirebaseVisionText.Element element: line.getElements()) {
                                 // ...
-                                System.out.println("Element: " + element.getText() + " bounding box " + element.getBoundingBox());
+//                                System.out.println("Element: " + element.getText() + " bounding box " + element.getBoundingBox());
                             }
                         }
                     }

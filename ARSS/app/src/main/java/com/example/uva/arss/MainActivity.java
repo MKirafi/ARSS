@@ -261,8 +261,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fillSudoku(Bitmap bitmap) {
+        while(imgView == null){
+            imgView = (ImageView) findViewById(R.id.view);
+        }
+
         Ocr ocr = new Ocr(bitmap);
-        ocr.recognizeSudoku();
+        Bitmap asd = ocr.recognizeSudoku();
+        imgView.setImageBitmap(asd);
         int[] sud = new int[81];
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
