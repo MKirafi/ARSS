@@ -7,21 +7,14 @@ package com.example.uva.arss;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,36 +27,17 @@ import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
-import org.w3c.dom.*;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import android.content.ActivityNotFoundException;
-import android.speech.RecognizerIntent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-import java.util.Arrays;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import static java.lang.Thread.sleep;
 import static org.opencv.core.CvType.CV_8UC4;
+
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     private DrawView drawView;
@@ -85,31 +59,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Checks all the permissions
+        checkPermission();
 
-        int[][] grid2 = {
-                {0,0,7,0,6,0,1,0,9},
-                {0,9,0,2,7,0,3,0,0},
-                {0,0,0,0,0,5,0,0,7},
-                {0,0,9,7,0,0,5,0,3},
-                {7,0,0,0,0,0,0,0,8},
-                {5,0,1,0,0,9,6,0,0},
-                {2,0,0,9,0,0,0,0,0},
-                {0,0,4,0,5,7,0,2,0},
-                {3,0,8,0,4,0,7,0,0}
-        };
-
-        int[][] grid = {
-                {8,0,0,0,0,0,0,0,0},
-                {0,0,3,6,0,0,0,0,0},
-                {0,7,0,0,9,0,2,0,0},
-                {0,5,0,0,0,7,0,0,0},
-                {0,0,0,0,4,5,7,0,0},
-                {0,0,0,1,0,0,0,3,0},
-                {0,0,1,0,0,0,0,6,8},
-                {0,0,8,5,0,0,0,1,0},
-                {0,9,0,0,0,0,4,0,0}
-        };
-
+        // Standard Sudoku
         int[] sud = {8,0,0,0,0,0,0,0,0,
                 0,0,3,6,0,0,0,0,0,
                 0,7,0,0,9,0,2,0,0,
@@ -120,20 +73,11 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 0,0,8,5,0,0,0,1,0,
                 0,9,0,0,0,0,4,0,0};
 
-        int[] sud2 = {0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0};
-
         this.startSudoku = sud;
 
         setContentView(R.layout.activity_main);
 
+        //Checks if camera is available else it waits
         while(camera == null) {
             camera = (JavaCameraView) findViewById(R.id.myCameraView);
         }
@@ -157,16 +101,16 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         while(!OpenCVLoader.initDebug()) {}
 
+        //Language spinner is set and languages are asigned
         Spinner language_spinner = (Spinner) findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> languageAdapter = ArrayAdapter.
                     createFromResource(this, R.array.language_array, android.R.layout.simple_spinner_item);
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         language_spinner.setAdapter(languageAdapter);
 
-        checkPermission();
 
         // The button for taking the image containing a sudoku.
-        Button takeImage = findViewById(R.id.take_image_button);
+        View takeImage = findViewById(R.id.take_image_button);
         takeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             // This method opens the camera app.
@@ -176,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             }
         });
 
+        //Button for scanning the image of sudoku
         Button scan = findViewById(R.id.scan);
         scan.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -187,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         });
 
         // The button for loading an image containing a sudoku.
-        Button loadImage = findViewById(R.id.load_image_button);
+        View loadImage = findViewById(R.id.load_image_button);
         loadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             // This method opens the gallery app.
@@ -199,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         });
 
+        //Creates the Speech recognizer
         this.sr = SpeechRecognizer.createSpeechRecognizer(this);
         sr.setRecognitionListener(new speechListener());
 
@@ -267,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         });
     }
 
+    // Checks if all the permissions are given else it asks for them
     private void checkPermission(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
@@ -297,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             ocr.setMat(mat);
             ocr.findGrid();
             sud = ocr.startRecog();
-//            sud = this.startSudoku;
             fillSudoku(sud, true);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -311,11 +257,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                  ocr.setMat(mat);
                  ocr.findGrid();
                  sud = ocr.startRecog();
-//            sud = this.startSudoku;
                  fillSudoku(sud, true);
              }
              catch(java.io.IOException e) {
-                 System.out.println("Something went wrong.");
              }
 
         }
@@ -353,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         return sudoku;
     }
 
+    //Fills the sudoku on screen
     public void fillSudoku(int[] sud, boolean permanent) {
         for (int i = 0; i < sud.length; i++) {
             setCell(i / 9, i % 9, sud[i], permanent);
@@ -360,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     @Override
+    //When new frame is loaded
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mat = inputFrame.rgba();
         ocr.setMat(mat);
@@ -368,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     @Override
+    //When camera is first opened
     public void onCameraViewStarted(int width, int height) {
         ocr = new Ocr();
         mat2 = new Mat(height, width, CV_8UC4);
@@ -375,11 +322,13 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     @Override
+    //When camera is closed
     public void onCameraViewStopped() {
         mat2.release();
     }
 
     @Override
+    //When camera is paused
     protected void onPause() {
         super.onPause();
         if(camera != null) {
@@ -388,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     @Override
+    //When camer is resumed
     protected void onResume() {
         super.onResume();
         if(!OpenCVLoader.initDebug()) {
@@ -399,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     @Override
+    //When camera is destroyed
     protected void onDestroy() {
         super.onDestroy();
         if(camera != null) {
