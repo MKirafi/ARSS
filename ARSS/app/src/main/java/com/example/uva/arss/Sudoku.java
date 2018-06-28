@@ -85,6 +85,7 @@ public class Sudoku {
         return true;
     }
 
+    // Returns whether sudoku is filled in completely.
     public static boolean complete(int[] grid) {
         for(int cell : grid) {
             if(cell == 0) return false;

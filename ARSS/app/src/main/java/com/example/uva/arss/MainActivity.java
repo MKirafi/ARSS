@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Returns whether a cell is editable.
     public boolean isEditable(int x, int y) {
         return this.startSudoku[y*9 + x] == 0;
     }
@@ -315,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Class used to receive text after listening.
     class speechListener implements RecognitionListener {
 
         public void onReadyForSpeech(Bundle params) {
@@ -336,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        // Parses result and fills new value at coordinate if possible.
         public void onResults(Bundle results) {
             String res = results.getStringArrayList(sr.RESULTS_RECOGNITION).get(0);
             VoiceCommand command = new VoiceCommand(res, language);
