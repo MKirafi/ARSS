@@ -1,11 +1,20 @@
+/*
+    This file contains the sourcecode for Optical Character Recognition (OCR) implementation. This
+    uses OpenCV for image processing. The processed image is fed into a Google Vision SDK, called
+    Firebase. The image is first preprocessed by applying a gaussian blur and adaptive tresholding.
+
+    After this, the largest four-sided polygon is found. Then the perspective is warped such that
+    the found sudoku is the only thing displayed. This is sent to the Firebase SDK for processing.
+
+    A lot of credit goes towards this github repo for being both a source of inspiration and code:
+    https://github.com/joseluisdiaz/sudoku-solver/tree/master/src/main/java/org/losmonos/sudoku/grabber
+ */
 package com.example.uva.arss;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +36,6 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -44,105 +52,76 @@ import static org.opencv.imgproc.Imgproc.getPerspectiveTransform;
 import static org.opencv.imgproc.Imgproc.warpPerspective;
 
 public class Ocr {
-    int height, width;
+    int height, width, index;
     Bitmap input, sudoku;
     Mat mat, hierarchy, matF, matT, wrapped, original;
     Size FOUR_CORNERS = new Size(1, 4);
     int[] grid = new int[81];
 
+    // Constructors.
     public Ocr(Bitmap bitmap) {
         height = bitmap.getHeight();
         width = bitmap.getWidth();
         input = bitmap;
     }
 
-    public Ocr(Mat mat) {
-        height = mat.height();
-        width = mat.width();
-        this.mat = mat;
-        this.original = mat;
+    public Ocr() {
     }
 
+    // Sets the Mat element.
+    public void setMat(Mat mat) {
+        this.mat = mat;
+        this.original = mat;
+        height = mat.height();
+        width = mat.width();
+    }
+
+
+    // This function finds the grid using camera or gallery input. The image is preprocessed, then
+    // the largest polygon is found and warped to fit the whole image.
     public Mat findGrid() {
         mat = turnImg(mat);
+        // Preprocessing the incoming image.
         mat = preProcessMat(mat);
+
+        // Largest polygon is found.
         MatOfPoint largest = largestPolygon(mat);
 
         if(largest != null) {
             MatOfPoint2f aproxPolygon = aproxPolygon(largest);
+            // Only four-sided polygons are allowed, sudoku's are squares.
             if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
+                // The image is warped to be a square instead of tilted because of perspective.
                 int size = distance(aproxPolygon);
                 Mat cutted = applyMask(original, largest);
                 wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
                 Imgproc.resize(wrapped, wrapped, new Size(original.cols(), original.rows()));
                 sudoku = Bitmap.createBitmap(wrapped.width(), wrapped.height(), Bitmap.Config.ARGB_8888);
-                System.out.println(sudoku.getHeight() + " " + sudoku.getWidth());
-                System.out.println(wrapped.height() + " " + wrapped.width());
                 Utils.matToBitmap(wrapped, sudoku);
-                recognizeText();
+                // The image is split into 81 parts.
+                List<Mat> cells = getBoxes(wrapped);
+                Imgproc.resize(cells.get(0), cells.get(0), new Size(original.cols(), original.rows()));
                 return wrapped;
-//                List<Mat> cells = getBoxes(wrapped);
-//                for (Mat cell : cells) {
-//                    sudoku = Bitmap.createBitmap(wrapped.height(), wrapped.width(), Bitmap.Config.ARGB_8888);
-//                    Utils.matToBitmap(wrapped, sudoku);
-//                    recognizeText();
-//                }
             }
         }
         return mat;
     }
 
-    public Bitmap recognizeSudoku() {
-//        sudoku = input;
-//        recognizeText();
-        mat = new Mat(input.getHeight(), input.getWidth(), CV_8UC4);
-        Bitmap bmp32 = input.copy(Bitmap.Config.ARGB_8888, true);
-        Utils.bitmapToMat(bmp32, mat);
-
-        mat = turnImg(mat);
-        mat = preProcessMat(mat);
-        MatOfPoint largest = largestPolygon(mat);
-
-        if(largest != null) {
-            MatOfPoint2f aproxPolygon = aproxPolygon(largest);
-            if(Objects.equals(aproxPolygon.size(), FOUR_CORNERS)) {
-                int size = distance(aproxPolygon);
-                Mat cutted = mat;
-               // Mat cutted = applyMask(mat, largest);
-                Mat wrapped = wrapPerspective(size, orderPoints(aproxPolygon), cutted);
-                if (wrapped == mat){
-                    System.out.println("wrapped werkt nieeeeeeeeeeeeeeeeeeeeeet");
-                }else{
-                    System.out.println("wrapped werkt weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeel");
-                    System.out.println("Mat: " + mat.height() + " , " + mat.width());
-                    System.out.println("Wrapped :" + wrapped.height() + " , " + wrapped.width());
-                }
-//                Core.bitwise_not(wrapped, wrapped);
-//                Core.bitwise_not(wrapped, wrapped);
-                sudoku = Bitmap.createBitmap(wrapped.height(), wrapped.width(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(wrapped, sudoku);
-//                List<Mat> cells = getBoxes(wrapped);
-//                for (Mat cell : cells) {
-//                    sudoku = Bitmap.createBitmap(cell.height(), cell.width(), Bitmap.Config.ARGB_8888);
-//                    Utils.matToBitmap(cell, sudoku);
-                    recognizeText();
-//                }
-                return sudoku;
-
-            }
-//            else {
-//                System.out.println("FAIL!!!");
-//                System.out.println("FAIL!!!");
-//                System.out.println("FAIL!!!");
-//                System.out.println("FAIL!!!");
-//                System.out.println("FAIL!!!");
-//                System.out.println("FAIL!!!");
-//            }
+    // This function starts the OCR by splitting the grid in 81 parts and sending them to the Firebase
+    // SDK for processing and recognition.
+    public int[] startRecog() {
+        List<Mat> cells = getBoxes(wrapped);
+        for (int i = 0; i < cells.size(); i++) {
+            Mat cell = cells.get(i);
+            sudoku = Bitmap.createBitmap(cell.height(), cell.width(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(cell, sudoku);
+            recognizeText(i);
         }
-        return null;
-//        return new int[81];
+        return grid;
     }
 
+    // This function preprocesses the image using gaussian blurring and adaptive tresholding.
+    // This makes lines and polygons more prominent and distinguished in the image.
     private Mat preProcessMat(Mat preprocMat) {
         Mat processed = new Mat(preprocMat.size(), CV_8UC4);
         Imgproc.cvtColor(preprocMat, processed, Imgproc.COLOR_RGBA2GRAY);
@@ -152,6 +131,7 @@ public class Ocr {
         return processed;
     }
 
+    // This function turns a image since the input image is rotated 90 degrees.
     private Mat turnImg(Mat original) {
         matF = new Mat(mat.height(), mat.width(), CV_8UC4);
         matT = new Mat(mat.width(), mat.width(), CV_8UC4);
@@ -162,6 +142,7 @@ public class Ocr {
     }
 
 
+    // This function finds the largest polygon using findContours and sorting for the largest.
     private MatOfPoint largestPolygon(Mat mat) {
         double area, largestArea = 0;
         MatOfPoint largest = null;
@@ -181,6 +162,7 @@ public class Ocr {
         return largest;
     }
 
+    // THis funcion aproximates polygons.
     private MatOfPoint2f aproxPolygon(MatOfPoint poly) {
         MatOfPoint2f dst = new MatOfPoint2f();
         MatOfPoint2f src = new MatOfPoint2f();
@@ -192,12 +174,14 @@ public class Ocr {
         return dst;
     }
 
+    // This function calculates the size of a polygon.
     private int distance(MatOfPoint2f poly) {
         org.opencv.core.Point[] a =  poly.toArray();
         return (int)Math.sqrt((a[0].x - a[1].x)*(a[0].x - a[1].x) +
                 (a[0].y - a[1].y)*(a[0].y - a[1].y));
     }
 
+    // This function applies a mask  on an image.
     private Mat applyMask(Mat image, MatOfPoint poly) {
         Mat mask = Mat.zeros(image.size(), CvType.CV_8UC1);
 
@@ -210,6 +194,8 @@ public class Ocr {
         return dst;
     }
 
+    // This function warps an image to fit the screen regardless of perspective. This is done using
+    // a transformation matrix.
     private Mat wrapPerspective(int size, MatOfPoint2f src, Mat image) {
         Size reshape = new Size(size, size);
 
@@ -219,11 +205,13 @@ public class Ocr {
         d.fromArray(new org.opencv.core.Point(0, 0), new org.opencv.core.Point(0, reshape.width), new org.opencv.core.Point(reshape.height, 0),
                 new org.opencv.core.Point(reshape.width, reshape.height));
 
+        // Warping the perspective.
         warpPerspective(image, undistorted, getPerspectiveTransform(src, d), reshape);
 
         return undistorted;
     }
 
+    // This function orders the points of a polygon for the warping of an image.
     private MatOfPoint2f orderPoints(MatOfPoint2f mat) {
         List<org.opencv.core.Point> pointList = SORT.sortedCopy(mat.toList());
 
@@ -245,6 +233,7 @@ public class Ocr {
             }
     );
 
+    // This function splits an image into 81 pieces since a sudoku has 81 cells.
     private List<Mat> getBoxes(Mat grid) {
         int size = grid.rows()/9;
         List<Mat> digitCells = Lists.newArrayList();
@@ -258,57 +247,28 @@ public class Ocr {
         return digitCells;
     }
 
-    private int[] parseText(String s) {
-        int[] result;
-        String[] ints = s.split("");
-        result = new int[ints.length];
-        for (int i = 0; i < ints.length; i++) {
-            result[i] = Integer.parseInt(ints[i]);
-        }
-        return result;
-    }
-
-    public int[] recognizeText() {
+    // This function recognizes text using Firebase, through a bitmap image.
+    public void recognizeText(int i) {
+        index = i;
+        // Image input.
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(sudoku);
         FirebaseVisionTextDetector detector = FirebaseVision.getInstance().getVisionTextDetector();
         Task<FirebaseVisionText> result =
                 detector
                 .detectInImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                 @Override
+                // If something is found.
                 public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                    int size = sudoku.getWidth()/9;
-                    int height = sudoku.getHeight();
-                    int width = sudoku.getWidth();
-                    int column, row, cells;
-                    //println(firebaseVisionText.getBlocks().size());
                     for (FirebaseVisionText.Block block: firebaseVisionText.getBlocks()) {
                         Rect boundingBox = block.getBoundingBox();
                         Point[] cornerPoints = block.getCornerPoints();
                         String text = block.getText();
-                        cells = (boundingBox.right - boundingBox.left)/size;
-                        column = boundingBox.centerY()/size;
-                        row = boundingBox.left/size;
-                        System.out.println("index: " + (row*9+column) + " text: " + text);
-                        if(cells > 1) {
-                            int[] values = parseText(text);
-                            for(int i = 0; i < values.length; i++) {
-                                grid[(row*9+column) + i] = values[i];
-                            }
+                        // Parsing the string to integers to insert into grid.
+                        try {
+                            grid[index] = Integer.parseInt(text);
                         }
-                        else {
-                            try {
-                                grid[row * 9 + column] = Integer.parseInt(text);
-                            }
-                            catch (Exception e) {
-                                grid[row * 9 + column] = 0;
-                            }
-                        }
-                        for (FirebaseVisionText.Line line: block.getLines()) {
-                            // ...
-                            for (FirebaseVisionText.Element element: line.getElements()) {
-                                // ...
-                                //System.out.println("Element: " + element.getText() + " bounding box " + element.getBoundingBox());
-                            }
+                        catch (Exception e) {
+                            grid[index] = 0;
                         }
                     }
                 }
@@ -317,22 +277,8 @@ public class Ocr {
                         new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                System.out.println("FAIL!!!!!!!!!!!!!!!!!!!!! :(");
-                                System.out.println("FAIL!!!!!!!!!!!!!!!!!!!!! :(");
-                                System.out.println("FAIL!!!!!!!!!!!!!!!!!!!!! :(");
-                                System.out.println("FAIL!!!!!!!!!!!!!!!!!!!!! :(");
-                                System.out.println("FAIL!!!!!!!!!!!!!!!!!!!!! :(");
                             }
                         }
                 );
-        System.out.println("=================================");
-        for (int i = 0; i < grid.length; i++) {
-            System.out.println("grid at " + i + " : " + grid[i]);
-            if(i % 8 == 0) {
-                System.out.println("\n");
-            }
-        }
-        System.out.println("=================================");
-        return grid;
     }
 }
