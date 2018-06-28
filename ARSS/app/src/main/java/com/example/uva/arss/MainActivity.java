@@ -242,8 +242,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             Utils.bitmapToMat(bmp32, mat);
             ocr = new Ocr();
             ocr.setMat(mat);
-            ocr.findGrid();
-            sud = ocr.startRecog();
+            sud = new int[81];
             fillSudoku(sud, true);
         }
         if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -255,8 +254,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                  Utils.bitmapToMat(bmp32, mat);
                  ocr = new Ocr();
                  ocr.setMat(mat);
-                 ocr.findGrid();
-                 sud = ocr.startRecog();
+                 sud = new int[81];
                  fillSudoku(sud, true);
              }
              catch(java.io.IOException e) {
@@ -292,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 cellText = cellText.equals("") ? "0" : cellText;
                 sudoku[i * 9 + j] = Integer.parseInt(cellText);
             }
-
         }
         return sudoku;
     }
