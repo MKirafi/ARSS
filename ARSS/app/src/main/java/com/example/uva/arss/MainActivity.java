@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private String language = "nl_NL";
     private SpeechRecognizer sr;
     private int[] startSudoku;
-    private int[] currentSudoku;
 
 
     @Override
@@ -107,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 0,0,0,0,0,0,0,0,0};
 
         this.startSudoku = sud;
+<<<<<<< ARSS/app/src/main/java/com/example/uva/arss/MainActivity.java
+=======
         this.currentSudoku = sud2;
 
         BruteSudoku bruteSudoku = new BruteSudoku(grid);
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(elapsedTime);
         System.out.println("=================================================");
         //print(sud2);
+>>>>>>> ARSS/app/src/main/java/com/example/uva/arss/MainActivity.java
 
         setContentView(R.layout.activity_main);
 
@@ -168,8 +170,39 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         instruction,
                         Toast.LENGTH_LONG).show();
-                //System.out.println(intentManager.getIntent().toString() + " intent");
                 sr.startListening(new IntentManager(language).getIntent());
+            }
+        });
+
+        /* "check sudoku" button: */
+        View checkSudoku = findViewById(R.id.check_sudoku);
+        checkSudoku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] sudoku = getSudoku();
+                boolean valid = Sudoku.solveSudoku(sudoku, 0) != null;
+                boolean complete = Sudoku.complete(sudoku);
+
+                Toast.makeText(getApplicationContext(),
+                        "Sudoku is\n" + "valid: " + valid + "\n" + "complete: " + complete,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+        /* "solve sudoku" button: */
+        View solveSudoku = findViewById(R.id.solve_sudoku);
+        solveSudoku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] sudoku = getSudoku();
+                int[] solved = Sudoku.solveSudoku(sudoku, 0);
+                if(solved == null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Sudoku is unsolvable.",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    fillSudokuWithGrid(solved, false);
+                }
             }
         });
 
@@ -239,17 +272,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isEditable(int x, int y) {
-        return startSudoku[y*9 + x] == 0;
+        return this.startSudoku[y*9 + x] == 0;
     }
 
     public void setCell(int x, int y, int value, boolean permanent) {
         String cell = "row" + x + "column" + y;
-        String stringValue = "" + value;
+        String stringValue = value == 0 ? "" : "" + value;
         EditText editText = (EditText) findViewById(getResources().getIdentifier(cell, "id", getPackageName()));
         editText.setText(stringValue);
-        if (permanent)
+        if (permanent && value != 0)
             editText.setEnabled(false);
     }
+
+    public int[] getSudoku() {
+        int[] sudoku = new int[81];
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                String selector = "row" + i + "column" + j;
+                EditText cell = (EditText) findViewById(getResources().getIdentifier(selector, "id", getPackageName()));
+                String cellText = cell.getText().toString();
+                cellText = cellText.equals("") ? "0" : cellText;
+                sudoku[i*9 + j] = Integer.parseInt(cellText);
 
     public void fillSudoku(int[] sud) {
         for(int i = 0; i < sud.length; i++) {
@@ -257,7 +300,21 @@ public class MainActivity extends AppCompatActivity {
                 setCell(i / 9, i % 9, sud[i], true);
             }
         }
+        return sudoku;
     }
+
+    public void fillSudokuWithGrid(int[] grid, boolean permanent) {
+        for(int i = 0; i < grid.length; i++) {
+            setCell(i / 9, i % 9, grid[i], permanent);
+        }
+    }
+
+    public void fillSudoku(Bitmap bitmap) {
+//        int[] sud = recognizeSudoku(bitmap);
+        int[] sud = this.startSudoku;
+        fillSudokuWithGrid(sud, true);
+    }
+
     class speechListener implements RecognitionListener {
 
         public void onReadyForSpeech(Bundle params) {
@@ -276,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onError(int error) {
-            System.out.println(error + " error!!");
+
         }
 
         public void onResults(Bundle results) {
