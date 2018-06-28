@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ import android.widget.Button;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.w3c.dom.*;
@@ -62,7 +64,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import static java.lang.Thread.sleep;
 import static org.opencv.core.CvType.CV_8UC4;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     private DrawView drawView;
     private int CAMERA_REQUEST = 1;
     private int GALLERY_REQUEST = 2;
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        camera = (JavaCameraView) findViewById(R.id.myCameraView);
+        camera.setVisibility(SurfaceView.VISIBLE);
+        camera.setCvCameraViewListener(this);
+
         // Enables the cameraview.
         baseLoaderCallback = new BaseLoaderCallback(this) {
             @Override
@@ -280,6 +287,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
+            while(imgView == null){
+                imgView = (ImageView) findViewById(R.id.view);
+            }
+
+            Ocr ocr = new Ocr(photo);
+            Bitmap asd = ocr.recognizeSudoku();
+            imgView.setImageBitmap(asd);
 //            sud = recognizeSudoku(photo);
             sud = this.startSudoku;
             fillSudoku(sud, true);
@@ -315,20 +329,6 @@ public class MainActivity extends AppCompatActivity {
             editText.setEnabled(false);
     }
 
-
-    public void fillSudoku(Bitmap bitmap) {
-        while(imgView == null){
-            imgView = (ImageView) findViewById(R.id.view);
-        }
-
-        Ocr ocr = new Ocr(bitmap);
-        Bitmap asd = ocr.recognizeSudoku();
-        imgView.setImageBitmap(asd);
-        int[] sud = new int[81];
-        for(int i = 0; i < sud.length; i++) {
-            if (sud[i] != 0) {
-                setCell(i / 9, i % 9, sud[i], true);
-                
     // This function fills the sudoku after getting the sudoku picture.
     public int[] getSudoku() {
         int[] sudoku = new int[81];
@@ -351,20 +351,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mat = inputFrame.rgba();
-        OCR ocr = new OCR(mat);
+        Ocr ocr = new Ocr(mat);
         mat = ocr.findGrid();
         return mat;
     }
 
     @Override
     public void onCameraViewStarted(int width, int height) {
-
         mat2 = new Mat(height, width, CV_8UC4);
         mat = new Mat();
     }
+
     @Override
     public void onCameraViewStopped() {
         mat2.release();
