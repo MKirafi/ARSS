@@ -2,6 +2,7 @@ package com.example.uva.arss;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,11 +16,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import org.opencv.android.OpenCVLoader;
 import org.w3c.dom.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -36,6 +39,8 @@ import android.view.View;
 
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,10 +63,14 @@ public class MainActivity extends AppCompatActivity {
     private int[] startSudoku;
     private int[] currentSudoku;
 
+    private ImageView imgView;
+    private Bitmap sudoku;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        while(!OpenCVLoader.initDebug()) {}
+        imgView = (ImageView) findViewById(R.id.imageView);
         int[][] grid2 = {
                 {0,0,7,0,6,0,1,0,9},
                 {0,9,0,2,7,0,3,0,0},
@@ -192,6 +201,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     public static void print(int[] grid) {
         for (int i = 0; i < 81; i += 9) {
             System.out.println(Arrays.toString(Arrays.copyOfRange(grid, i, i + 9)));
@@ -250,8 +261,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fillSudoku(Bitmap bitmap) {
-        int[] sud = recognizeSudoku(bitmap);
-//        int[] sud = new int[81];
+        Ocr ocr = new Ocr(bitmap);
+        ocr.recognizeSudoku();
+        int[] sud = new int[81];
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
                 setCell(i / 9, i % 9, sud[i], true);
