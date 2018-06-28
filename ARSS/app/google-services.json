@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "966841328364",
+    "firebase_url": "https://arss-dceaf.firebaseio.com",
+    "project_id": "arss-dceaf",
+    "storage_bucket": "arss-dceaf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966841328364:android:dbdfb5e3768c52e1",
+        "android_client_info": {
+          "package_name": "com.example.uva.arss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966841328364-06e6vma5m8opvbe5r9qccdq39e342sfq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdJe8SO6oJXg5FeEn3yBi4lkTmk3BhJsc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
