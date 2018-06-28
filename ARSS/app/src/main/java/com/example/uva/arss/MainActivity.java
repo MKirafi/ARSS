@@ -1,3 +1,8 @@
+/* Names: Mund Vetter, Abdelilah Ahbari, Mounir el Kirafi, Liam Zuiderhoek
+ * StudentID: 11902388, 12021954, 11879106, 11154136
+ * In this mainactivity a picture of the sudoku can be made, the sudoku can be solved,
+ * the sudoku can be filled in manually and through voice commands.
+ */
 package com.example.uva.arss;
 
 import android.Manifest;
@@ -134,18 +139,22 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermission();
 
+        // The button for taking the image containing a sudoku.
         Button takeImage = findViewById(R.id.take_image_button);
         takeImage.setOnClickListener(new View.OnClickListener() {
             @Override
+            // This method opens the camera app.
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
 
+        // The button for loading an image containing a sudoku.
         Button loadImage = findViewById(R.id.load_image_button);
         loadImage.setOnClickListener(new View.OnClickListener() {
             @Override
+            // This method opens the gallery app.
             public void onClick(View v) {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
@@ -215,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
      * Callback for speech recognition activity
      * */
     @Override
+    // This function is for returning the picture from load image and take image.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         int[] sud;
         super.onActivityResult(requestCode, resultCode, data);
@@ -228,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
              try {
                  Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                  sud = recognizeSudoku(photo);
-                 fillSudoku(photo);
+                 fillSudoku(sud);
              }
              catch(java.io.IOException e) {
                  System.out.println("Something went wrong.");
@@ -242,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
         return startSudoku[y*9 + x] == 0;
     }
 
+    // This function sets a sudoku cell, with the option of making the cell permanent.
     public void setCell(int x, int y, int value, boolean permanent) {
         String cell = "row" + x + "column" + y;
         String stringValue = "" + value;
@@ -251,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
             editText.setEnabled(false);
     }
 
+    // This function fills the sudoku after getting the sudoku picture.
     public void fillSudoku(int[] sud) {
         for(int i = 0; i < sud.length; i++) {
             if (sud[i] != 0) {
