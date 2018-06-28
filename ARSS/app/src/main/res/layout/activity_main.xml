@@ -1349,7 +1349,7 @@
         app:layout_editor_absoluteX="149dp"
         app:layout_editor_absoluteY="447dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/record_audio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -1357,7 +1357,7 @@
         android:layout_marginEnd="134dp"
         android:layout_marginStart="16dp"
         android:layout_weight="1"
-        android:text="Record audio"
+        android:src="@drawable/mic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/load_image_button"
         app:layout_constraintStart_toStartOf="parent"
