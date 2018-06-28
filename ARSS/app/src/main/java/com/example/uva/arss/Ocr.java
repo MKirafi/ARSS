@@ -48,6 +48,7 @@ public class Ocr {
     Bitmap input, sudoku;
     Mat mat, hierarchy, matF, matT, wrapped, original;
     Size FOUR_CORNERS = new Size(1, 4);
+    int[] grid = new int[81];
 
     public Ocr(Bitmap bitmap) {
         height = bitmap.getHeight();
@@ -257,9 +258,17 @@ public class Ocr {
         return digitCells;
     }
 
+    private int[] parseText(String s) {
+        int[] result;
+        String[] ints = s.split("");
+        result = new int[ints.length];
+        for (int i = 0; i < ints.length; i++) {
+            result[i] = Integer.parseInt(ints[i]);
+        }
+        return result;
+    }
 
-    private void recognizeText() {
-//        System.out.println("rows: " + sudoku.getHeight() + " cols: " + sudoku.getWidth());
+    public int[] recognizeText() {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(sudoku);
         FirebaseVisionTextDetector detector = FirebaseVision.getInstance().getVisionTextDetector();
         Task<FirebaseVisionText> result =
@@ -267,14 +276,33 @@ public class Ocr {
                 .detectInImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                 @Override
                 public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                    System.out.println("FOUND SOMETHING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    int size = sudoku.getWidth()/9;
+                    int height = sudoku.getHeight();
+                    int width = sudoku.getWidth();
+                    int column, row, cells;
                     //println(firebaseVisionText.getBlocks().size());
                     for (FirebaseVisionText.Block block: firebaseVisionText.getBlocks()) {
                         Rect boundingBox = block.getBoundingBox();
                         Point[] cornerPoints = block.getCornerPoints();
                         String text = block.getText();
-                        System.out.println("TEXT FOUND!!!!!!!!!!!!!!!!!!: " + text);
-
+                        cells = (boundingBox.right - boundingBox.left)/size;
+                        column = boundingBox.centerY()/size;
+                        row = boundingBox.left/size;
+                        System.out.println("index: " + (row*9+column) + " text: " + text);
+                        if(cells > 1) {
+                            int[] values = parseText(text);
+                            for(int i = 0; i < values.length; i++) {
+                                grid[(row*9+column) + i] = values[i];
+                            }
+                        }
+                        else {
+                            try {
+                                grid[row * 9 + column] = Integer.parseInt(text);
+                            }
+                            catch (Exception e) {
+                                grid[row * 9 + column] = 0;
+                            }
+                        }
                         for (FirebaseVisionText.Line line: block.getLines()) {
                             // ...
                             for (FirebaseVisionText.Element element: line.getElements()) {
@@ -297,5 +325,14 @@ public class Ocr {
                             }
                         }
                 );
+        System.out.println("=================================");
+        for (int i = 0; i < grid.length; i++) {
+            System.out.println("grid at " + i + " : " + grid[i]);
+            if(i % 8 == 0) {
+                System.out.println("\n");
+            }
+        }
+        System.out.println("=================================");
+        return grid;
     }
 }
